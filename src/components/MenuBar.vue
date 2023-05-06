@@ -21,6 +21,7 @@ const resetMenu = () => {
     initials.value = user.value.fName[0] + user.value.lName[0];
     name.value = user.value.fName + " " + user.value.lName;
   }
+  console.log(user);
 };
 
 const logout = () => {
@@ -57,6 +58,9 @@ onMounted(() => {
         {{ title }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <div>
+        <v-btn class="mx-2" :to="{ name: 'editPermissions'}">Edit Permissions </v-btn>
+      </div>
       <div v-if="user">
         <v-btn class="mx-2" :to="{ name: 'tutorials' }"> List </v-btn>
         <v-btn class="mx-2" :to="{ name: 'add' }"> Add Tutorial </v-btn>

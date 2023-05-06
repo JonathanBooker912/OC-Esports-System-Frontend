@@ -7,6 +7,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const fName = ref("");
 const lName = ref("");
+const role = ref("");
 const user = ref({});
 
 const loginWithGoogle = () => {
@@ -38,6 +39,7 @@ const handleCredentialResponse = async (response) => {
       Utils.setStore("user", user.value);
       fName.value = user.value.fName;
       lName.value = user.value.lName;
+      role.value = user.value.role;
       router.push({ name: "tutorials" });
     })
     .catch((error) => {
