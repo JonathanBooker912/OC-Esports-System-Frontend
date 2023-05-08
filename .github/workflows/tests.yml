@@ -18,7 +18,7 @@ jobs:
 
       - run: |
           touch .env
-          echo VITE_APP_CLIENT_ID=${{secrets.VITE_APP_CLIENT_ID}} >> .env
+          echo VITE_APP_CLIENT_ID=${{secrets.VUE_APP_CLIENT_ID}} >> .env
           echo VITE_APP_API_URL=${{secrets.VITE_APP_API_URL}} >> .env
           echo VITE_APP_CLIENT_URL=ec2-3-91-79-116.compute-1.amazonaws.com >> .env
           echo VITE_APP_CLIENT_SECRET=${{secrets.VITE_APP_CLIENT_SECRET}} >> .env
