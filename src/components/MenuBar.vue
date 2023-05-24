@@ -13,6 +13,8 @@ const title = ref("Tutorials");
 const initials = ref("");
 const name = ref("");
 const logoURL = ref("");
+const admin = ref(false);
+
 
 const resetMenu = () => {
   user.value = null;
@@ -39,6 +41,9 @@ const logout = () => {
 onMounted(() => {
   logoURL.value = ocLogo;
   resetMenu();
+  if (user.role == "ADMIN"){
+    admin.value = true;
+  }
 });
 </script>
 
@@ -60,6 +65,9 @@ onMounted(() => {
       <v-spacer></v-spacer>
       <div>
         <v-btn class="mx-2" :to="{ name: 'editPermissions'}">Edit Permissions </v-btn>
+      </div>
+      <div>
+        <v-btn v-if="admin" class="mx-2" :to="{ name: 'userList' }">Edit Users</v-btn>
       </div>
       <div v-if="user">
         <v-btn class="mx-2" :to="{ name: 'tutorials' }"> List </v-btn>
