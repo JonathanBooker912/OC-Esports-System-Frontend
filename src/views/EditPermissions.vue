@@ -1,4 +1,12 @@
-<script>
+<script setup>
+//Need to be able to filter by user role
+//Need to be able to change the permissions of a user
+</script>
+
+<template>
+    
+
+</template><script>
 import UserItem from "../components/UserItem.vue"
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
