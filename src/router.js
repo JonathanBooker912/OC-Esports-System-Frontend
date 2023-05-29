@@ -10,6 +10,8 @@ import AddLesson from "./views/AddLesson.vue";
 import EditLesson from "./views/EditLesson.vue";
 import AdminDashboard from "./views/AdminDashboard.vue";
 import EditPlayerInfo from "./views/EditPlayerInfo.vue";
+import ViewAlias from "./views/ViewAlias.vue";
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +66,12 @@ const router = createRouter({
       path: "/editLesson/:tutorialId/:lessonId",
       name: "editLesson",
       component: EditLesson,
+      props: true,
+    },
+    {
+      path: "/viewAlias",
+      name: "viewAlias",
+      component: ViewAlias,
       props: true,
     },
   ],
