@@ -1,15 +1,14 @@
 <script setup>
-import ocLogo from "/oc-logo-white.png";
+import ocLogo from "/nav_main.svg";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-
 
 import Utils from "../config/utils";
 import AuthServices from "../services/authServices";
 
 const router = useRouter();
 const user = ref(null);
-const title = ref("Tutorials");
+const title = ref("Esports Portal");
 const initials = ref("");
 const name = ref("");
 const logoURL = ref("");
@@ -48,8 +47,8 @@ onMounted(() => {
         <v-img
           class="mx-2"
           :src="logoURL"
-          height="50"
-          width="50"
+          height="100"
+          width="100"
           contain
         ></v-img>
       </router-link>
