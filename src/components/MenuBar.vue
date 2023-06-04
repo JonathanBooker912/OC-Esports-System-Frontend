@@ -40,10 +40,32 @@ onMounted(() => {
 });
 </script>
 
+<script>
+import { ref } from "vue";
+const drawer = ref(false);
+export default {
+  computed: {
+    displayDrawer() {
+      const { sm, xs } = this.$vuetify.display;
+      return sm || xs ? true : false;
+    },
+    drawerState() {
+      const { sm, xs } = this.$vuetify.display;
+      if (!sm && !xs) drawer.value = false;
+      return !sm && !xs ? false : drawer.value;
+    },
+    drawerWidth() {
+      const { sm, xs } = this.$vuetify.display;
+      return sm ? 450 : xs ? 350 : 500;
+    },
+  },
+};
+</script>
+
 <template>
   <div>
     <v-app-bar app>
-      <router-link :to="{ name: 'tutorials' }">
+      <router-link :to="{ name: 'Dashboard' }">
         <v-img
           class="mx-2"
           :src="logoURL"
@@ -56,11 +78,17 @@ onMounted(() => {
         {{ title }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <div v-if="user">
-        <v-btn class="mx-2" :to="{ name: 'tutorials' }"> List </v-btn>
-        <v-btn class="mx-2" :to="{ name: 'add' }"> Add Tutorial </v-btn>
+      <div v-if="user && !displayDrawer">
+        <!--<v-btn class="mx-2" :to="{ name: 'tutorials' }"> List </v-btn>
+        <v-btn class="mx-2" :to="{ name: 'add' }"> Add Tutorial </v-btn>-->
       </div>
-      <v-menu bottom min-width="200px" rounded offset-y v-if="user">
+      <v-menu
+        bottom
+        min-width="200px"
+        rounded
+        offset-y
+        v-if="user && !displayDrawer"
+      >
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props" icon x-large>
             <v-avatar v-if="user" color="secondary">
@@ -86,6 +114,23 @@ onMounted(() => {
           </v-card-text>
         </v-card>
       </v-menu>
+      <v-app-bar-nav-icon
+        variant="text"
+        @click.stop="drawer = !drawer"
+        v-if="displayDrawer"
+      ></v-app-bar-nav-icon>
     </v-app-bar>
+
+    <v-navigation-drawer
+      v-model="drawerState"
+      location="right"
+      :width="drawerWidth"
+      temporary
+    >
+      <v-list>
+        <!--<v-btn class="mx-2" :to="{ name: 'tutorials' }"> List </v-btn>
+        <v-btn class="mx-2" :to="{ name: 'add' }"> Add Tutorial </v-btn>-->
+      </v-list>
+    </v-navigation-drawer>
   </div>
 </template>

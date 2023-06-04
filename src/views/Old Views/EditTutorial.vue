@@ -1,36 +1,40 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import TutorialServices from "../services/tutorialServices";
-import Utils from "../config/utils.js";
+import TutorialServices from "../../services/Old Services/tutorialServices";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const valid = ref(false);
-const user = Utils.getStore("user");
-const tutorial = ref({
-  id: null,
-  title: "",
-  description: "",
-  published: false,
-});
+const tutorial = ref({});
 const message = ref("Enter data and click save");
 
-const saveTutorial = () => {
+const props = defineProps({
+  id: {
+    required: true,
+  },
+});
+
+const retrieveTutorial = async () => {
+  try {
+    const response = await TutorialServices.get(props.id);
+    tutorial.value = response.data;
+  } catch (e) {
+    message.value = e.response.data.message;
+  }
+};
+
+const updateTutorial = async () => {
   const data = {
     title: tutorial.value.title,
     description: tutorial.value.description,
-    published: true,
-    userId: user.userId,
   };
-  TutorialServices.create(data)
-    .then((response) => {
-      tutorial.value.id = response.data.id;
-      console.log("add " + response.data);
-      router.push({ name: "tutorials" });
-    })
-    .catch((e) => {
-      message.value = e.response.data.message;
-    });
+  try {
+    const response = await TutorialServices.update(props.id, data);
+    tutorial.value.id = response.data.id;
+    router.push({ name: "tutorials" });
+  } catch (e) {
+    message.value = e.response.data.message;
+  }
 };
 
 const cancel = () => {
@@ -38,7 +42,7 @@ const cancel = () => {
 };
 
 onMounted(() => {
-  user.value = Utils.getStore("user");
+  retrieveTutorial();
 });
 </script>
 
@@ -46,9 +50,8 @@ onMounted(() => {
   <div>
     <v-container>
       <v-toolbar>
-        <v-toolbar-title>Tutorial Add</v-toolbar-title>
+        <v-toolbar-title>Tutorial Edit</v-toolbar-title>
       </v-toolbar>
-
       <br />
       <h4>{{ message }}</h4>
       <br />
@@ -72,12 +75,12 @@ onMounted(() => {
           :disabled="!valid"
           color="success"
           class="mr-4"
-          @click="saveTutorial"
+          @click="updateTutorial()"
         >
           Save
         </v-btn>
 
-        <v-btn color="error" class="mr-4" @click="cancel">Cancel</v-btn>
+        <v-btn color="error" class="mr-4" @click="cancel()"> Cancel </v-btn>
       </v-form>
     </v-container>
   </div>

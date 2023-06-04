@@ -1,6 +1,6 @@
 <script setup>
-import TutorialServices from "../services/tutorialServices";
-import Utils from "../config/utils.js";
+import TutorialServices from "../../services/Old Services/tutorialServices";
+import Utils from "../../config/utils.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -63,7 +63,7 @@ retrieveTutorials();
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in tutorials" :key="item.title">
+            <tr v-for="item /*index*/ in tutorials" :key="item.title">
               <td>{{ item.title }}</td>
               <td>{{ item.description }}</td>
               <td>

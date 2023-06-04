@@ -1,5 +1,5 @@
 <script setup>
-import LessonServices from "../services/lessonServices";
+import LessonServices from "../../services/Old Services/lessonServices";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
