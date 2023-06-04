@@ -78,9 +78,11 @@ export default {
         {{ title }}
       </v-toolbar-title>
       <v-spacer></v-spacer>
+
       <div v-if="user && !displayDrawer">
         <!--<v-btn class="mx-2" :to="{ name: 'tutorials' }"> List </v-btn>
         <v-btn class="mx-2" :to="{ name: 'add' }"> Add Tutorial </v-btn>-->
+        <v-btn class="mx-2" :to="{ name: 'viewAlias' }">Aliases </v-btn>
       </div>
       <v-menu
         bottom
