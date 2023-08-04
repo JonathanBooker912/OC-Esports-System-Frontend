@@ -4,6 +4,7 @@ import Login from "./views/Login.vue";
 
 import Dashboard from "./views/Dashboard.vue";
 import EditPlayerInfo from "./views/EditPlayerInfo.vue";
+import EditPermissions from "./views/EditPermissions.vue";
 import PlayerInfo from "./views/PlayerInfo.vue";
 import ViewAlias from "./views/ViewAlias.vue";
 import AddAccount from "./views/AddAccount.vue";
@@ -35,6 +36,16 @@ const router = createRouter({
       component: PlayerInfo,
       props: true,
     },
+    {
+      path: "/EditPermissions",
+      name: "editPermissions",
+      component: EditPermissions,
+    },
+    // {
+    //   path: "/users",
+    //   name: "userList",
+    //   component: UserList,
+    // }
     {
       path: "/viewAlias",
       name: "viewAlias",

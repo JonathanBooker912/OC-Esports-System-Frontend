@@ -12,6 +12,9 @@ export default {
   getUser(userId) {
     return apiClient.get("user/" + userId);
   },
+  getAll() {
+    return apiClient("/users");
+  },
   getUserByEmail(email) {
     return apiClient.get("user?email=" + email);
   },
