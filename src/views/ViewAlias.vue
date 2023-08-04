@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import AliasServices from "../services/aliasServices.js";
 import TitleServices from "../services/titleServices.js";
-import AliasComponent from "../components/AliasComponent.vue";
+import AliasComponent from "../components/View/AliasComponent.vue";
 import Utils from "../config/utils.js";
 
 const aliases = ref({});

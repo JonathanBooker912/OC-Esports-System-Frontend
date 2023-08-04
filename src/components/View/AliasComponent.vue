@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, reactive } from "vue";
-import TextField from "../components/FormInputs/TextField.vue";
+import TextField from "../FormComponents/TextField.vue";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 
@@ -66,7 +66,7 @@ onMounted(() => {
     temp_gamer_tag.value = props.alias.gamerTag;
     temp_title.value = props.titles.filter(
       (title) => title.id == props.alias.titleId
-    )[0].name;
+    )[0];
   }
 });
 </script>
@@ -77,7 +77,7 @@ onMounted(() => {
       {{
         // This takes the title id that the alias has and finds the corresponding name attribute
         //  in the title table
-        props.titles.filter((title) => title.id == props.alias.titleId)[0].name
+        props.titles.filter((title) => title.id == props.alias.titleId)[0]
       }}
     </td>
     <td v-else>
@@ -96,7 +96,11 @@ onMounted(() => {
     </td>
     <td v-if="!isEdit">{{ props.alias.gamerTag }}</td>
     <td v-else>
-      <TextField label="Gamer Tag" v-model="data.gamerTag"></TextField>
+      <TextField
+        v-model="data.gamerTag"
+        label="Gamer Tag"
+        :validators="{ required }"
+      />
     </td>
     <td>
       <v-icon v-if="!isEdit" small class="mx-4" @click="toggle">
@@ -135,7 +139,11 @@ onMounted(() => {
       ></v-select>
     </td>
     <td v-if="!hideAdd">
-      <TextField label="Gamer Tag" v-model="data.gamerTag"></TextField>
+      <TextField
+        v-model="data.gamerTag"
+        label="Gamer Tag"
+        :validators="{ required }"
+      />
     </td>
     <td v-if="!hideAdd">
       <v-btn icon="mdi-minus-circle" @click="hideAdd = true"></v-btn>
