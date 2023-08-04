@@ -8,6 +8,8 @@ import EditPermissions from "./views/EditPermissions.vue";
 import PlayerInfo from "./views/PlayerInfo.vue";
 import ViewAlias from "./views/ViewAlias.vue";
 import AddAccount from "./views/AddAccount.vue";
+import ViewUsers from "./views/ViewUsers.vue";
+import EditUsers from "./views/EditUsers.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,11 +43,6 @@ const router = createRouter({
       name: "editPermissions",
       component: EditPermissions,
     },
-    // {
-    //   path: "/users",
-    //   name: "userList",
-    //   component: UserList,
-    // }
     {
       path: "/viewAlias",
       name: "viewAlias",
@@ -56,6 +53,18 @@ const router = createRouter({
       path: "/addAccount",
       name: "addAccount",
       component: AddAccount,
+      props: true,
+    },
+    {
+      path: "/viewUsers",
+      name: "viewUsers",
+      component: ViewUsers,
+      props: true,
+    },
+    {
+      path: "/editUsers/:userId",
+      name: "editUsers",
+      component: EditUsers,
       props: true,
     },
   ],
