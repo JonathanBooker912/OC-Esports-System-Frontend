@@ -25,12 +25,21 @@ const myCustomLightTheme = {
     darkblue: "#032F45",
   },
 };
+const tableTheme = {
+  dark: false,
+  colors: {
+    primary: "#E1E1E1",
+    accent: "#80162B",
+    secondary: "#E1E1E1",
+  },
+};
 
 const vuetify = createVuetify({
   theme: {
     defaultTheme: "myCustomLightTheme",
     themes: {
       myCustomLightTheme,
+      tableTheme,
     },
   },
   icons: {

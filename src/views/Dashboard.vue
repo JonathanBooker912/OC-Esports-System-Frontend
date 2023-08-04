@@ -12,9 +12,9 @@
         <v-list-item> Task B </v-list-item>
         <v-list-item> Task C </v-list-item>
       </v-list>
-      <v-action>
+      <!-- <v-action>
         <v-btn class="ma-3"> View All </v-btn>
-      </v-action>
+      </v-action> -->
     </v-card>
   </v-container>
 </template>

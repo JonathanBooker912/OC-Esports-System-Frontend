@@ -2,20 +2,32 @@ import apiClient from "./services";
 
 export default {
   /*-- General User Information --*/
-  updateUser(userId, user) {
+  createUser(user) {
     console.log(user);
+    return apiClient.post("user/", user);
+  },
+  updateUser(userId, user) {
     return apiClient.put("user/" + userId, user);
   },
   getUser(userId) {
     return apiClient.get("user/" + userId);
+  },
+  getUserByEmail(email) {
+    return apiClient.get("user?email=" + email);
   },
   getClassifications() {
     return apiClient.get("user/classifications");
   },
 
   /*-- Emergency Contacts --*/
-  addEmergencyContact(contact) {
+  addEmergencyContact(userId, contact) {
     return apiClient.post(`/user/${userId}/emergencyContacts/`, contact);
+  },
+  updateEmergencyContact(userId, contact) {
+    return apiClient.put(
+      `/user/${userId}/emergencyContacts/${contact.id}`,
+      contact
+    );
   },
   getEmergencyContacts(userId) {
     return apiClient.get(`/user/${userId}/emergencyContacts/`);
@@ -24,6 +36,9 @@ export default {
   /*-- Aliases --*/
   getPrimaryAlias(userId) {
     return apiClient.get(`user/${userId}/alias?type=primary`);
+  },
+  getAllAliases(userId) {
+    return apiClient.get(`user/${userId}/alias`);
   },
   addAlias(userId, alias) {
     return apiClient.post(`user/${userId}/alias`, alias);

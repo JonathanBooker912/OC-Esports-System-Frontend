@@ -2,7 +2,7 @@
 import { reactive, ref, onMounted } from "vue";
 import useVuelidate from "@vuelidate/core";
 
-const props = defineProps(["modelValue", "label", "validators"]);
+const props = defineProps(["modelValue", "label", "items", "validators"]);
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -20,20 +20,21 @@ onMounted(() => {
   isMounted.value = true;
   v$ = useVuelidate(rules, data);
 });
-
-/* { fieldValue: value, error: value } */
 </script>
 
 <template>
-  <v-text-field
+  <v-select
     v-if="isMounted"
     class="pa-2"
     :name="props.label"
     :label="props.label"
+    :items="props.items"
+    item-title="name"
+    item-value="value"
     v-model="data[props.label]"
     :error-messages="v$[props.label].$errors.map((e) => e.$message)"
     @input="v$[props.label].$touch"
     @blur="v$[props.label].$touch"
     @update:modelValue="emit('update:modelValue', data[props.label])"
-  ></v-text-field>
+  ></v-select>
 </template>

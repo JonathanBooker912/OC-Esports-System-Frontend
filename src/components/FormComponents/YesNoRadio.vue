@@ -1,38 +1,40 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
 
-const props = defineProps(["modelValue", "label"]);
-const data = ref({
-  fieldValue: "",
-});
+const props = defineProps(["modelValue", "question", "valueKey", "validators"]);
 
 const emit = defineEmits(["update:modelValue"]);
 
-const rules = reactive({
-  fieldValue: { required },
-});
+const isMounted = ref(false);
 
-const v$ = useVuelidate(rules, data);
+const data = ref({});
+const rules = reactive({});
+
+let v$;
 
 onMounted(() => {
-  data.value.fieldValue = props.modelValue;
+  data.value[props.valueKey] = props.modelValue;
+  rules[props.valueKey] = props.validators;
+
+  isMounted.value = true;
+  v$ = useVuelidate(rules, data);
 });
 </script>
 
 <template>
   <v-radio-group
-    v-model="data.fieldValue"
+    v-if="isMounted"
     class="pa-2"
-    :error-messages="v$.fieldValue.$errors.map((e) => e.$message)"
-    @input="v$.fieldValue.touch"
-    @blur="v$.fieldValue.touch"
-    @update:modelValue="emit('update:modelValue', data.fieldValue)"
     color="text primary"
+    v-model="data[props.valueKey]"
+    :error-messages="v$[props.valueKey].$errors.map((e) => e.$message)"
+    @input="v$[props.valueKey].$touch"
+    @blur="v$[props.valueKey].$touch"
+    @update:modelValue="emit('update:modelValue', data[props.valueKey])"
   >
-    <p>{{ props.label }}</p>
-    <v-radio label="Yes" v-bind:value="true"></v-radio>
-    <v-radio label="No" v-bind:value="false"></v-radio>
+    <p>{{ props.question }}</p>
+    <v-radio label="Yes" :value="true"></v-radio>
+    <v-radio label="No" :value="false"></v-radio>
   </v-radio-group>
 </template>

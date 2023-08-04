@@ -1,36 +1,38 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
 
-const props = defineProps(["modelValue", "label", "items"]);
-const data = ref({
-  fieldValue: "",
-});
+const props = defineProps(["modelValue", "label", "items", "validators"]);
 
 const emit = defineEmits(["update:modelValue"]);
 
-const rules = reactive({
-  fieldValue: { required },
-});
+const isMounted = ref(false);
 
-const v$ = useVuelidate(rules, data);
+const data = ref({});
+const rules = reactive({});
+
+let v$;
 
 onMounted(() => {
-  data.value.fieldValue = props.modelValue;
+  data.value[props.label] = props.modelValue;
+  rules[props.label] = props.validators;
+
+  isMounted.value = true;
+  v$ = useVuelidate(rules, data);
 });
 </script>
 
 <template>
   <v-combobox
+    v-if="isMounted"
+    class="pa-2"
     :name="props.label"
     :label="props.label"
-    v-model="data.fieldValue"
-    class="pa-2"
     :items="props.items"
-    :error-messages="v$.fieldValue.$errors.map((e) => e.$message)"
-    @input="v$.fieldValue.$touch"
-    @blur="v$.fieldValue.$touch"
-    @update:modelValue="emit('update:modelValue', data.fieldValue)"
+    v-model="data[props.label]"
+    :error-messages="v$[props.label].$errors.map((e) => e.$message)"
+    @input="v$[props.label].$touch"
+    @blur="v$[props.label].$touch"
+    @update:modelValue="emit('update:modelValue', data[props.label])"
   ></v-combobox>
 </template>

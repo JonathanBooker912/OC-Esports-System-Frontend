@@ -50,7 +50,7 @@ onMounted(() => {
     date.value.month = propsDate.getMonth();
     date.value.year = propsDate.getFullYear();
   }
-  console.log(date.value);
+
   let currentYear = new Date().getFullYear();
   for (let i = currentYear; i < currentYear + 5; i++) {
     years.value.push(i);
