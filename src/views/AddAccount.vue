@@ -43,7 +43,8 @@ const addEmails = async () => {
   } else {
     for (let i = 0; i < emails.value.length; i++) {
       let response = await UserServices.getUserByEmail(emails.value[i]);
-      if (response.data.length == 0) {
+      console.log(response);
+      if (response.data.count == 0) {
         UserServices.createUser({ email: emails.value[i] });
         removeEmail(emails.value[i]);
         i--;

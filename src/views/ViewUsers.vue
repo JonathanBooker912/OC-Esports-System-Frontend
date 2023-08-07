@@ -30,7 +30,7 @@ const getUsers = (itemsPerPage, page) => {
 };
 
 function getUserForID(userId) {
-  UserServices.get(userId)
+  UserServices.getUser(userId)
     .then((response) => {
       user.value = response.data;
     })
