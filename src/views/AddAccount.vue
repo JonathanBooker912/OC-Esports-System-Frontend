@@ -39,20 +39,31 @@ const createUser = async (userEmail) => {
 const addEmails = async () => {
   loading.value = true;
   if (addMethod.value == 0) {
-    createUser(data.value.email);
+    let duplicate = await emailExists(emails.value[0]);
+    if (!duplicate) {
+      createUserFromEmail(emails.value[0]);
+    }
   } else {
     for (let i = 0; i < emails.value.length; i++) {
-      let response = await UserServices.getUserByEmail(emails.value[i]);
-      console.log(response);
-      if (response.data.count == 0) {
-        UserServices.createUser({ email: emails.value[i] });
-        removeEmail(emails.value[i]);
+      let duplicate = await emailExists(emails.value[i]);
+      if (!duplicate) {
+        createUserFromEmail(emails.value[i]);
         i--;
       }
     }
-    loading.value = false;
-    showDialog.value = true;
   }
+  loading.value = false;
+  showDialog.value = true;
+};
+
+const createUserFromEmail = (email) => {
+  UserServices.createUser({ email: email });
+  removeEmail(email);
+};
+
+const emailExists = async (email) => {
+  let response = await UserServices.getUserByEmail(email);
+  return response.data.count != 0;
 };
 
 const findDelimiter = () => {
