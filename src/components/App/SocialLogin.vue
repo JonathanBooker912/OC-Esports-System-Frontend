@@ -1,8 +1,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import AuthServices from "../services/authServices";
-import Utils from "../config/utils.js";
+import AuthServices from "../../services/authServices";
+import UserServices from "../../services/userServices";
+import Utils from "../../config/utils.js";
 import { useRouter } from "vue-router";
+import userServices from "../../services/userServices";
+import { useMenuStore } from "../../stores/menuBarStore";
+import { storeToRefs } from "pinia";
+
+const store = useMenuStore();
+const isLoggedIn = storeToRefs(store);
 
 const router = useRouter();
 const fName = ref("");
@@ -38,11 +45,23 @@ const handleCredentialResponse = async (response) => {
       Utils.setStore("user", user.value);
       fName.value = user.value.fName;
       lName.value = user.value.lName;
-      router.push({ name: "tutorials" });
+
+      store.setDisplayActions(true);
+      navigateToNextPage();
     })
     .catch((error) => {
       console.log("error", error);
     });
+};
+
+const navigateToNextPage = () => {
+  UserServices.getUser(Utils.getStore("user").userId).then((response) => {
+    if (!response.data.accountUpToDate) {
+      router.push({ name: "playerForm" });
+    } else {
+      router.push({ name: "Dashboard" });
+    }
+  });
 };
 
 onMounted(() => {
