@@ -1,8 +1,8 @@
 <script setup>
-import UserServices from "../services/userServices.js";
+import UserServices from "../../../services/userServices.js";
 import { useRouter } from "vue-router";
 import { ref, onMounted, computed } from "vue";
-import DataTable from "../components/DataTable.vue";
+import DataTable from "../../../components/DataTable.vue";
 
 const router = useRouter();
 const users = ref([]);
@@ -10,12 +10,12 @@ const count = ref();
 const dialog = ref(false);
 const user = ref({});
 
-const headers = ref([
-  { title: "Users", align: "start", sortable: false, key: "id" },
-  { title: "First Name", align: "end", key: "fName" },
-  { title: "Last Name", align: "end", key: "lName" },
-  { title: "Email", align: "end", key: "email" },
-]);
+const actions = [{ label: "View", event: "view-user" }];
+
+const handleActionEvent = (payload) => {
+  console.log(payload.event);
+  if (payload.event == "view-user") viewUser(payload.value);
+};
 
 const getUsers = (itemsPerPage, page) => {
   UserServices.getAll(itemsPerPage, page)
@@ -68,6 +68,13 @@ const viewUser = (userId) => {
     <DataTable
       :data="users"
       :count="count"
+      :columns="[
+        { key: 'fName', label: 'First Name' },
+        { key: 'lName', label: 'Last Name' },
+        { key: 'email', label: 'Email' },
+      ]"
+      :actions="actions"
+      @action-event="handleActionEvent"
       @view-user="viewUser"
       @search="search"
     ></DataTable>

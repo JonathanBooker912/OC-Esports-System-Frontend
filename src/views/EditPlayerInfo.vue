@@ -2,7 +2,7 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import useVuelidate from "@vuelidate/core";
-import { required, helpers, integer } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 
 import Utils from "../config/utils";
 

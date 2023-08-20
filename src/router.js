@@ -7,8 +7,9 @@ import EditPlayerInfo from "./views/EditPlayerInfo.vue";
 import EditPermissions from "./views/EditPermissions.vue";
 import PlayerInfo from "./views/PlayerInfo.vue";
 import ViewAlias from "./views/ViewAlias.vue";
-import AddAccount from "./views/AddAccount.vue";
-import ViewUsers from "./views/ViewUsers.vue";
+import AddAccount from "./views/maintain/users/AddAccount.vue";
+import MaintainUsers from "./views/maintain/users/MaintainUsers.vue";
+import MaintainTeams from "./views/maintain/teams/MaintainTeams.vue";
 import EditUsers from "./views/EditUsers.vue";
 
 const router = createRouter({
@@ -50,15 +51,15 @@ const router = createRouter({
       props: true,
     },
     {
-      path: "/addAccount",
-      name: "addAccount",
-      component: AddAccount,
+      path: "/maintainUsers",
+      name: "maintainUsers",
+      component: MaintainUsers,
       props: true,
     },
     {
-      path: "/viewUsers",
-      name: "viewUsers",
-      component: ViewUsers,
+      path: "/maintainTeams",
+      name: "maintainTeams",
+      component: MaintainTeams,
       props: true,
     },
     {
