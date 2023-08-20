@@ -22,6 +22,11 @@ props.actions
 
 const emit = defineEmits(["search", "action-event"]);
 
+const changeItemsPerPage = () => {
+  page.value = 1;
+  search()
+}
+
 const totalItems = computed(() => {
   return props ? Math.ceil(props.count / itemsPerPage.value) : 0;
 });
@@ -100,7 +105,7 @@ onMounted(() => {
       <v-pagination
         class="w-auto mx-2"
         v-if="hasLoaded"
-        :length="length"
+        :length="totalItems"
         v-model="page"
         @update:modelValue="search"
         :total-visible="4"

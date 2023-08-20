@@ -14,7 +14,8 @@ const validator = new FormValidator();
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
-    console.log(valid);
+    updateTeam()
+    dialog.value = false;
   } else {
     return;
   }
@@ -64,7 +65,6 @@ async function getTeamForID(teamId) {
   await TeamServices.getTeam(teamId)
     .then((response) => {
       selectedTeam.value = response.data;
-      teamEditInfo.value = selectedTeam.value;
     })
     .catch((err) => {
       console.log(err);
@@ -103,6 +103,21 @@ const deleteTeam = () => {
     });
   showConfirmDialog();
 };
+
+const updateTeam = () => {
+    const updatedTeam = {
+      name: selectedTeam.value.name,
+      isFlagship: selectedTeam.value.isFlagship
+    }
+   TeamServices.updateTeam(selectedTeam.value.id, updatedTeam)
+    .then(response => {
+      getUsers(5,1)
+    })
+    .catch(error => {
+      console.error("Error updating team:", error);
+      // Handle the error, like showing an error message
+    });
+}
 
 onMounted(() => {
   getUsers(5, 1);
