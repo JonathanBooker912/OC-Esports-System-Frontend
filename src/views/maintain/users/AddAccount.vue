@@ -1,12 +1,12 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import TextField from "../components/FormComponents/TextField.vue";
-import EmailListItem from "../components/View/EmailListItem.vue";
+import TextField from "../../../components/FormComponents/TextField.vue";
+import EmailListItem from "../../../components/View/EmailListItem.vue";
 
-import FormValidator from "../components/FormComponents/support/FormValidator";
+import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
-import UserServices from "../services/userServices";
+import UserServices from "../../../services/userServices";
 import { required, email } from "@vuelidate/validators"; // Check before deleting this
 
 const router = useRouter();
@@ -105,80 +105,71 @@ export default {
 </script>
 
 <template>
-  <v-col class="mx-auto pt-16" :cols="cols">
-    <v-card>
-      <v-card-title primary-title> Add Account </v-card-title>
-      <v-radio-group v-model="addMethod" class="pa-2" color="text primary">
-        <v-radio label="Add One" v-bind:value="0"></v-radio>
-        <v-radio label="Add List" v-bind:value="1"></v-radio>
-      </v-radio-group>
+  <v-col class="mx-auto" :cols="cols">
+    <v-radio-group v-model="addMethod" class="pa-2" color="text primary">
+      <v-radio label="Add One" v-bind:value="0"></v-radio>
+      <v-radio label="Add List" v-bind:value="1"></v-radio>
+    </v-radio-group>
 
-      <TextField
-        class="w-75 mx-auto pt-6"
-        v-model="emails[0]"
-        label="Email"
-        v-if="addMethod == 0"
-        :validators="{ required, email }"
-      />
-      <div class="w-75 mx-auto pt-6" v-if="addMethod == 1">
-        <div v-if="emails.length < 1">
-          <v-textarea
-            name="values"
-            label="Values"
-            v-model="userInputList"
-          ></v-textarea>
-          <v-row class="mx-3">
-            <v-checkbox
-              label="Custom Delimiter"
-              v-model="useCustomDelimiter"
-              value="value"
-            ></v-checkbox>
-            <v-text-field
-              v-if="useCustomDelimiter"
-              name="name"
-              label="Delimiter"
-              id="id"
-              v-model="selectedDelimiter"
-            ></v-text-field>
-          </v-row>
-          <v-row>
-            <v-btn
-              color="accent"
-              class="mx-auto mt-2 mb-6"
-              @click="parseEmails()"
-              :disabled="userInputList.length < 1"
-              >Split Values</v-btn
-            >
-          </v-row>
-        </div>
-        <EmailListItem
-          v-for="email in emails"
-          :key="emails.indexOf(email)"
-          v-model="emails[emails.indexOf(email)]"
-          @emailRemoved="removeEmail(email)"
-        />
+    <TextField
+      class="w-75 mx-auto pt-6"
+      v-model="emails[0]"
+      label="Email"
+      v-if="addMethod == 0"
+      :validators="{ required, email }"
+    />
+    <div class="w-75 mx-auto pt-6" v-if="addMethod == 1">
+      <div v-if="emails.length < 1">
+        <v-textarea
+          name="values"
+          label="Values"
+          v-model="userInputList"
+        ></v-textarea>
+        <v-row class="mx-3">
+          <v-checkbox
+            label="Custom Delimiter"
+            v-model="useCustomDelimiter"
+            value="value"
+          ></v-checkbox>
+          <v-text-field
+            v-if="useCustomDelimiter"
+            name="name"
+            label="Delimiter"
+            id="id"
+            v-model="selectedDelimiter"
+          ></v-text-field>
+        </v-row>
+        <v-row>
+          <v-btn
+            color="accent"
+            class="mx-auto mt-2 mb-6"
+            @click="parseEmails()"
+            :disabled="userInputList.length < 1"
+            >Split Values</v-btn
+          >
+        </v-row>
       </div>
+      <EmailListItem
+        v-for="email in emails"
+        :key="emails.indexOf(email)"
+        v-model="emails[emails.indexOf(email)]"
+        @emailRemoved="removeEmail(email)"
+      />
+    </div>
 
-      <v-row
-        class="justify-center mb-4 mt-3"
-        v-if="addMethod == 0 || emails.length > 0"
+    <v-row
+      class="justify-center mb-4 mt-3"
+      v-if="addMethod == 0 || emails.length > 0"
+    >
+      <v-btn color="success" class="w-25 mx-4" @click="validateForm">Add</v-btn>
+      <v-btn color="secondary" class="w-25 mx-4" @click="returnToDashboard()"
+        >Cancel</v-btn
       >
-        <v-btn color="success" class="w-25 mx-4" @click="validateForm"
-          >Add</v-btn
-        >
-        <v-btn color="secondary" class="w-25 mx-4" @click="returnToDashboard()"
-          >Cancel</v-btn
-        >
-      </v-row>
+    </v-row>
 
-      <v-overlay
-        v-model="loading"
-        contained
-        class="align-center justify-center"
-      >
-        <v-progress-circular indeterminate></v-progress-circular>
-      </v-overlay>
-    </v-card>
+    <v-overlay v-model="loading" contained class="align-center justify-center">
+      <v-progress-circular indeterminate></v-progress-circular>
+    </v-overlay>
 
     <v-dialog v-model="showDialog" width="auto">
       <v-card>

@@ -23,6 +23,17 @@ const name = ref("");
 const logoURL = ref("");
 const backgroundUrl = ref("");
 
+const maintainenceActions = [
+  {
+    title: "Teams",
+    component: "maintainTeams",
+  },
+  {
+    title: "Users",
+    component: "maintainUsers",
+  },
+];
+
 const userDetailsLoaded = ref(false);
 
 const resetMenu = () => {
@@ -101,9 +112,27 @@ export default {
         <v-btn class="mx-2" :to="{ name: 'viewAlias' }" color="secondary"
           >Aliases
         </v-btn>
-        <v-btn class="mx-2" :to="{ name: 'addAccount' }" color="secondary"
-          >Add Account
+
+        <v-btn color="secondary">
+          Maintain
+
+          <v-menu activator="parent" open-on-hover>
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in maintainenceActions"
+                :key="index"
+                :value="index"
+                @click="router.push({ name: item.component })"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-btn>
+
+        <!-- <v-btn class="mx-2" :to="{ name: 'addAccount' }" color="secondary"
+          >Add Account
+        </v-btn> -->
         <v-btn class="mx-2" :to="{ name: 'playerInfo' }" color="secondary"
           >My Info
         </v-btn>
