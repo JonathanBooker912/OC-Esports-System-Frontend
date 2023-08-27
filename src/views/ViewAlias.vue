@@ -1,5 +1,4 @@
 <script setup>
-import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import AliasServices from "../services/aliasServices.js";
 import TitleServices from "../services/titleServices.js";
@@ -14,6 +13,7 @@ const titlesLoaded = ref(false);
 const props = defineProps({
   id: {
     required: true,
+    type: Number,
   },
 });
 
@@ -91,21 +91,21 @@ onMounted(() => {
         <tbody v-if="titlesLoaded">
           <AliasComponent
             v-for="alias in aliases"
-            :key="alias.id"
             :id="alias.id"
+            :key="alias.id"
             :alias="alias"
-            :isAdd="false"
+            :is-add="false"
             :titles="titles"
-            @editAlias="editAlias"
-            @deleteAlias="deleteAlias"
+            @edit-alias="editAlias"
+            @delete-alias="deleteAlias"
           />
 
           <AliasComponent
             id="NewAlias"
             :alias="null"
-            :isAdd="true"
+            :is-add="true"
             :titles="titles"
-            @addAlias="createAlias"
+            @add-alias="createAlias"
           />
         </tbody>
       </v-table>

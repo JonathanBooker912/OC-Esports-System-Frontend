@@ -5,7 +5,7 @@ export default class FormValidator {
     this.v$ = useVuelidate();
   }
 
-  isFormValid = async () => {
+  async isFormValid() {
     return await this.v$.value.$validate();
-  };
+  }
 }

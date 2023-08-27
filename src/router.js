@@ -1,16 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Login from "./views/Login.vue";
+import Login from "./views/LoginPage.vue";
 
-import Dashboard from "./views/Dashboard.vue";
+import Dashboard from "./views/UserDashboard.vue";
 import EditPlayerInfo from "./views/EditPlayerInfo.vue";
-import EditPermissions from "./views/EditPermissions.vue";
 import PlayerInfo from "./views/PlayerInfo.vue";
 import ViewAlias from "./views/ViewAlias.vue";
-import AddAccount from "./views/maintain/users/AddAccount.vue";
 import MaintainUsers from "./views/maintain/users/MaintainUsers.vue";
 import MaintainTeams from "./views/maintain/teams/MaintainTeams.vue";
-import EditUsers from "./views/EditUsers.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,11 +37,6 @@ const router = createRouter({
       props: true,
     },
     {
-      path: "/EditPermissions",
-      name: "editPermissions",
-      component: EditPermissions,
-    },
-    {
       path: "/viewAlias",
       name: "viewAlias",
       component: ViewAlias,
@@ -60,12 +52,6 @@ const router = createRouter({
       path: "/maintainTeams",
       name: "maintainTeams",
       component: MaintainTeams,
-      props: true,
-    },
-    {
-      path: "/editUsers/:userId",
-      name: "editUsers",
-      component: EditUsers,
       props: true,
     },
   ],

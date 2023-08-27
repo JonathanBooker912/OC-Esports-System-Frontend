@@ -1,6 +1,5 @@
 <script setup>
-import { reactive, ref, onMounted } from "vue";
-import useVuelidate from "@vuelidate/core";
+import { ref, onMounted } from "vue";
 import Utils from "../config/utils";
 
 import TabListInfo from "../components/View/TabListInfo.vue";
@@ -42,7 +41,7 @@ function getEmergencyContacts() {
       for (let i = 0; i < response.data.length; i++) {
         emergencyContacts.value.push(response.data[i]);
       }
-    }
+    },
   );
 }
 
@@ -94,7 +93,7 @@ export default {
 
 <template>
   <v-container>
-    <v-col class="mx-auto pa-0" v-if="userInfoLoaded">
+    <v-col v-if="userInfoLoaded" class="mx-auto pa-0">
       <v-row class="justify-center align-center">
         <v-col class="text-center" :cols="cols[0]">
           <v-card class="pa-5 elevation-3 border-bottom">
@@ -119,29 +118,29 @@ export default {
                 <InfoRow
                   label="Phone: "
                   :data="userInfo.phoneNumber"
-                  iconName="mdi-phone-outline"
+                  icon-name="mdi-phone-outline"
                 />
                 <InfoRow
                   label="Email: "
                   :data="userInfo.email"
-                  iconName="mdi-email-outline"
+                  icon-name="mdi-email-outline"
                 />
                 <InfoRow
                   label="Hometown: "
                   :data="`${userInfo.city}, ${userInfo.state} (${userInfo.country})`"
-                  iconName="mdi-home-outline"
+                  icon-name="mdi-home-outline"
                 />
                 <InfoRow
                   label="Merch Info: "
                   :data="`Shirt: ${userInfo.shirtSize} / Pants: ${userInfo.pantSize}`"
-                  iconName="mdi-tshirt-crew-outline"
+                  icon-name="mdi-tshirt-crew-outline"
                 />
                 <InfoRow
                   label="Graduation Date: "
                   :data="`${
                     userInfo.expectedGradDate.getMonth() + 1
                   } / ${userInfo.expectedGradDate.getFullYear()}`"
-                  iconName="mdi-school-outline"
+                  icon-name="mdi-school-outline"
                 />
               </tbody>
             </v-table>
@@ -154,8 +153,8 @@ export default {
           <v-card class="h-100 elevation-3 border-left">
             <TabListInfo
               :items="aliases"
-              tabLabel="Alias"
-              :infoLabels="['Gamertag', 'Title']"
+              tab-label="Alias"
+              :info-labels="['Gamertag', 'Title']"
               :template="{ title: '', gamerTag: '' }"
             />
           </v-card>
@@ -164,8 +163,8 @@ export default {
           <v-card class="h-100 elevation-3 border-left">
             <TabListInfo
               :items="emergencyContacts"
-              tabLabel="Emergency Contact"
-              :infoLabels="[
+              tab-label="Emergency Contact"
+              :info-labels="[
                 'First Name',
                 'Last Name',
                 'Phone #',

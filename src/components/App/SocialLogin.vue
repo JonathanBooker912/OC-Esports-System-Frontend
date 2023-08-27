@@ -4,12 +4,9 @@ import AuthServices from "../../services/authServices";
 import UserServices from "../../services/userServices";
 import Utils from "../../config/utils.js";
 import { useRouter } from "vue-router";
-import userServices from "../../services/userServices";
 import { useMenuStore } from "../../stores/menuBarStore";
-import { storeToRefs } from "pinia";
 
 const store = useMenuStore();
-const isLoggedIn = storeToRefs(store);
 
 const router = useRouter();
 const fName = ref("");
@@ -72,7 +69,7 @@ onMounted(() => {
 <template>
   <div class="signup-buttons">
     <v-row justify="center">
-      <div display="flex" id="parent_id"></div>
+      <div id="parent_id" display="flex" />
     </v-row>
   </div>
 </template>

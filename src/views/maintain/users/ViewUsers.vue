@@ -1,10 +1,8 @@
 <script setup>
 import UserServices from "../../../services/userServices.js";
-import { useRouter } from "vue-router";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import DataTable from "../../../components/DataTable.vue";
 
-const router = useRouter();
 const users = ref([]);
 const count = ref();
 const dialog = ref(false);
@@ -77,17 +75,17 @@ const viewUser = (userId) => {
       @action-event="handleActionEvent"
       @view-user="viewUser"
       @search="search"
-    ></DataTable>
+    />
     <div class="text-center">
       <v-dialog
-        transition="dialog-top-transition"
         v-model="dialog"
+        transition="dialog-top-transition"
         width="auto"
       >
         <v-card v-if="dialog">
-          <v-toolbar color="primary" title="View More"
-            ><v-btn icon="mdi-arrow-left" @click="dialog = false"></v-btn
-          ></v-toolbar>
+          <v-toolbar color="primary" title="View More">
+            <v-btn icon="mdi-arrow-left" @click="dialog = false" />
+          </v-toolbar>
           <v-card-text>
             <div class="text-h5 pa-5">First Name: {{ user.fName }}</div>
             <div class="text-h5 pa-5">Last Name: {{ user.lName }}</div>

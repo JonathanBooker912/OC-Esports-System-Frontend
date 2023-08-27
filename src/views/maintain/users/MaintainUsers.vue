@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref } from "vue";
 
 import ViewUsers from "./ViewUsers.vue";
 import AddAccount from "./AddAccount.vue";
@@ -22,14 +22,18 @@ export default {
   <v-col :cols="cols" class="mx-auto">
     <v-card>
       <v-tabs v-model="currentTab" color="primary" dark slider-color="primary">
-        <v-tab value="1">View Users</v-tab>
-        <v-tab value="2">Add User</v-tab>
+        <v-tab value="1"> View Users </v-tab>
+        <v-tab value="2"> Add User </v-tab>
       </v-tabs>
       <v-divider />
       <v-window v-model="currentTab">
-        <v-window-item value="1"> <ViewUsers /> </v-window-item>
+        <v-window-item value="1">
+          <ViewUsers />
+        </v-window-item>
 
-        <v-window-item value="2"> <AddAccount /> </v-window-item>
+        <v-window-item value="2">
+          <AddAccount />
+        </v-window-item>
       </v-window>
     </v-card>
   </v-col>

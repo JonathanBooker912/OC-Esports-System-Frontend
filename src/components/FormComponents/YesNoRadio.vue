@@ -2,7 +2,24 @@
 import { reactive, ref, onMounted } from "vue";
 import useVuelidate from "@vuelidate/core";
 
-const props = defineProps(["modelValue", "question", "valueKey", "validators"]);
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+  question: {
+    type: String,
+    default: "",
+  },
+  valueKey: {
+    type: String,
+    default: null,
+  },
+  validators: {
+    type: Object,
+    default: null,
+  },
+});
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -25,16 +42,16 @@ onMounted(() => {
 <template>
   <v-radio-group
     v-if="isMounted"
+    v-model="data[props.valueKey]"
     class="pa-2"
     color="text primary"
-    v-model="data[props.valueKey]"
     :error-messages="v$[props.valueKey].$errors.map((e) => e.$message)"
     @input="v$[props.valueKey].$touch"
     @blur="v$[props.valueKey].$touch"
-    @update:modelValue="emit('update:modelValue', data[props.valueKey])"
+    @update:model-value="emit('update:modelValue', data[props.valueKey])"
   >
     <p>{{ props.question }}</p>
-    <v-radio label="Yes" :value="true"></v-radio>
-    <v-radio label="No" :value="false"></v-radio>
+    <v-radio label="Yes" :value="true" />
+    <v-radio label="No" :value="false" />
   </v-radio-group>
 </template>

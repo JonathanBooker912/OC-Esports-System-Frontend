@@ -2,13 +2,12 @@
 import TeamServices from "../../../services/teamServices.js";
 import TitleServices from "../../../services/titleServices";
 
-import { ref, onMounted, computed } from "vue";
-import useVuelidate from "@vuelidate/core";
+import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
 import TextField from "../../../components/FormComponents/TextField.vue";
-import Select from "../../../components/FormComponents/Select.vue";
+import Select from "../../../components/FormComponents/SelectBox.vue";
 
 const validator = new FormValidator();
 
@@ -28,7 +27,7 @@ const addTeam = () => {
         showDialog.value = true;
       } else {
         console.log(response);
-        error.value = response.data.message;
+        errorMsg.value = response.data.message;
       }
     })
     .catch((error) => {
@@ -82,11 +81,11 @@ onMounted(() => {
         label="Team Name"
         :validators="{ required }"
       />
-      <v-checkbox v-model="team.isFlagship" label="Is Flagship"></v-checkbox>
+      <v-checkbox v-model="team.isFlagship" label="Is Flagship" />
     </div>
     <div class="text-center">
-      <v-btn color="primary" @click="validateForm" class="ma-4">Save</v-btn>
-      <v-btn @click="dialog = false" class="ma-4">Cancel</v-btn>
+      <v-btn color="primary" class="ma-4" @click="validateForm"> Save </v-btn>
+      <v-btn class="ma-4" @click="dialog = false"> Cancel </v-btn>
     </div>
     <v-dialog v-model="showDialog" width="auto">
       <v-card>
@@ -94,7 +93,7 @@ onMounted(() => {
           {{ errorMsg ? errorMsg : "Successfully Added Team!" }}
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" block @click="resetAdd">OK</v-btn>
+          <v-btn color="primary" block @click="resetAdd"> OK </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
