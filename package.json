@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "bundle": "mv .env dist",
     "test": "cypress run",
-    "test:open": "cypress open"
+    "test:open": "cypress open",
+    "lint" : "eslint --ext .js,.vue src",
+    "lint:fix" : "eslint --fix --ext .js,.vue src"
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",

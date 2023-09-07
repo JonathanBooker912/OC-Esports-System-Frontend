@@ -11,7 +11,6 @@ const user = ref({});
 const actions = [{ label: "View", event: "view-user" }];
 
 const handleActionEvent = (payload) => {
-  console.log(payload.event);
   if (payload.event == "view-user") viewUser(payload.value);
 };
 

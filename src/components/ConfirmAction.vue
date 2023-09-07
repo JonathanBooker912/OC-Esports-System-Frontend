@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 // const props = defineProps(["action", "show"]);
 const props = defineProps({
@@ -12,7 +12,8 @@ const props = defineProps({
 const emit = defineEmits(["action", "cancel", "show"]);
 
 const buttonText = ref("Save");
-const showDialog = ref(false);
+const showDialog = computed(() => props.show)
+
 
 const cancel = () => {
   emit("cancel");
@@ -26,13 +27,12 @@ onMounted(() => {
   if (props.action === "Delete") {
     buttonText.value = "Delete";
   }
-  showDialog.value = props.show;
 });
 </script>
 
 <template>
-  <div v-if="props.show">
-    <v-dialog activator="parent" persistent>
+  <div>
+    <v-dialog v-model="showDialog" persistent>
       <v-card class="w-25 mx-auto">
         <v-card-title class="w-auto mx-auto ma-4">
           Are you sure you want to {{ props.action }}?

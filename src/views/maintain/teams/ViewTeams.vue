@@ -34,7 +34,6 @@ const actions = [
 ];
 
 const handleActionEvent = (payload) => {
-  console.log(payload.event);
   if (payload.event == "edit-team") viewTeam(payload.value);
 
   if (payload.event == "delete-team") {
@@ -90,10 +89,8 @@ const viewTeam = async (userId) => {
 };
 
 const deleteTeam = () => {
-  console.log("here")
   TeamServices.deleteTeam(teamToDelete.value)
-    .then((response) => {
-      console.log("Team deleted:", response.data);
+    .then(() => {
       getUsers(5, 1);
     })
     .catch((error) => {

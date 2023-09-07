@@ -4,7 +4,7 @@ import useVuelidate from "@vuelidate/core";
 
 const props = defineProps({
   modelValue: {
-    type: Object,
+    type: Number,
     default: null,
   },
   label: {

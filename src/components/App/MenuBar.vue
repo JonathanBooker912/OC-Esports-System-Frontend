@@ -40,7 +40,6 @@ const resetMenu = () => {
   user.value = null;
   user.value = Utils.getStore("user");
   if (user.value) {
-    console.log(user.value);
     initials.value = user.value.fName[0] + user.value.lName[0];
     name.value = user.value.fName + " " + user.value.lName;
     userDetailsLoaded.value = true;
