@@ -3,7 +3,7 @@ name: ESLint & Prettier
 on: [push, pull_request]
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,5 +11,5 @@ jobs:
         with:
           node-version: 16.x
       - run: npm install
-      - run: npm lint:check
+      - run: npm lint
       - run: npm format:check

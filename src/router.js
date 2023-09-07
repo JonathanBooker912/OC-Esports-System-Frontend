@@ -10,7 +10,6 @@ import MaintainUsers from "./views/maintain/users/MaintainUsers.vue";
 import MaintainTeams from "./views/maintain/teams/MaintainTeams.vue";
 
 import AuthServices from "./services/authServices.js";
-import { nextTick } from "vue";
 
 function authenticateUser(to, from, next) {
   // Grabs the user from local storage and turns it into a JSON object that we can use
@@ -18,7 +17,7 @@ function authenticateUser(to, from, next) {
 
   // Calls the backend to validate the token
   AuthServices.validateToken(user)
-    .then((res) => {
+    .then(() => {
       // If the backend returns with an all good, then we can direct the user
       //  to where they were trying to go
       next();
