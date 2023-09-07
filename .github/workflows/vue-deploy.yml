@@ -29,6 +29,11 @@ jobs:
           echo VITE_APP_SITE_URL=ec2-3-91-79-116.compute-1.amazonaws.com >> .env
 
       - run: npm install
+
+      - run: |
+          npm lint:check
+          npm format:check
+
       - run: npm run build
       - run: npm run bundle
 

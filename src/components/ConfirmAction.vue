@@ -12,8 +12,7 @@ const props = defineProps({
 const emit = defineEmits(["action", "cancel", "show"]);
 
 const buttonText = ref("Save");
-const showDialog = computed(() => props.show)
-
+const showDialog = computed(() => props.show);
 
 const cancel = () => {
   emit("cancel");
