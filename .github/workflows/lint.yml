@@ -10,7 +10,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
+      - run: ls
       - run: npm ci
-      - run: npm lint:check
+      - run: npm lint
       - run: npm format:check
 
