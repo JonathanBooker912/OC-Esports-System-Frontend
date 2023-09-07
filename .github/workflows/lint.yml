@@ -1,9 +1,9 @@
-name: ESLint & Prettier
+name: Tests CI
 
 on: [push, pull_request]
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,5 +11,6 @@ jobs:
         with:
           node-version: 16.x
       - run: npm ci
-      - run: eslint --fix --ext .js,.vue src
-      - run: prettier . --check
+      - run: npm lint:check
+      - run: npm format:check
+
