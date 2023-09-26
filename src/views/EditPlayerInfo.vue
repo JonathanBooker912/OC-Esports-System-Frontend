@@ -2,7 +2,7 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import useVuelidate from "@vuelidate/core";
-import { required, helpers } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 
 import Utils from "../config/utils";
 
@@ -12,7 +12,7 @@ import MonthYearPicker from "../components/View/MonthYearPicker.vue";
 import TextField from "../components/FormComponents/TextField.vue";
 import ComboBox from "../components/FormComponents/ComboBox.vue";
 import YesNoRadio from "../components/FormComponents/YesNoRadio.vue";
-import Select from "../components/FormComponents/Select.vue";
+import Select from "../components/FormComponents/SelectBox.vue";
 /* API Services */
 import TitleServices from "../services/titleServices";
 import UserServices from "../services/userServices";
@@ -91,7 +91,7 @@ function addContact(contactInfo) {
 // remove a specific object from the emergency contact array
 function removeContact(contact) {
   emergencyContacts.value = emergencyContacts.value.filter(
-    (current) => current != contact
+    (current) => current != contact,
   );
 }
 
@@ -111,14 +111,14 @@ async function updateInfo() {
         (error) => {
           console.log(error);
           errorMessage.value = `Emergency Contact Error: ${error.response.data.message}, please contact an admin`;
-        }
+        },
       );
     } else {
       UserServices.addEmergencyContact(userId, currentContact).catch(
         (error) => {
           console.log(error);
           errorMessage.value = `Emergency Contact Error: ${error.response.data.message}, please contact an admin`;
-        }
+        },
       );
     }
   }
@@ -169,7 +169,7 @@ function getEmergencyContacts() {
       } else {
         addContact();
       }
-    }
+    },
   );
 }
 
@@ -268,7 +268,7 @@ export default {
               :errors="
                 v$.$errors
                   .filter(
-                    (e) => e.$property == 'month' || e.$property == 'year'
+                    (e) => e.$property == 'month' || e.$property == 'year',
                   )
                   .map((e) => e.$message)
               "
@@ -306,14 +306,14 @@ export default {
             <YesNoRadio
               v-model="userInfo.outsidePC"
               question="Do you have a PC in your Dorm/Housing that you can compete with?"
-              valueKey="outsidePC"
+              value-key="outsidePC"
               :validators="{ required }"
             />
 
             <YesNoRadio
               v-model="userInfo.fullVacc"
               question="Are you fully vaccinated? (with booster)"
-              valueKey="fullVacc"
+              value-key="fullVacc"
               :validators="{ required }"
             />
 
@@ -322,14 +322,15 @@ export default {
               :key="emergencyContacts.indexOf(contact)"
               :index="emergencyContacts.indexOf(contact)"
               :model-value="contact"
-              @deleteContact="removeContact(contact)"
+              @delete-contact="removeContact(contact)"
             />
             <v-btn
               color="secondary"
               class="w-50 mx-auto d-block"
               @click="addContact"
-              >Add contact</v-btn
             >
+              Add contact
+            </v-btn>
           </v-form>
         </v-container>
         <v-container class="w-75 mx-auto text-center">
@@ -344,17 +345,19 @@ export default {
           <v-btn
             color="secondary"
             class="w-100 mx-auto ma-4"
-            @click="validateForm"
             :disabled="v$.$errors.length > 0 || errorMessage"
-            >Save</v-btn
+            @click="validateForm"
           >
+            Save
+          </v-btn>
           <v-btn
             v-if="userInfo.accountUpToDate"
             color="accent"
             class="w-100 mx-auto ma-4"
             @click="router.push({ name: 'Dashboard' })"
-            >Cancel</v-btn
           >
+            Cancel
+          </v-btn>
         </v-container>
       </v-card>
     </v-col>

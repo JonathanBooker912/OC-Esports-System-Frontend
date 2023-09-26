@@ -9,7 +9,7 @@ export default defineConfig({
       googleRefreshToken: env.VITE_APP_REFRESH_TOKEN,
       googleClientId: env.VITE_APP_CLIENT_ID,
       googleClientSecret: env.VITE_APP_CLIENT_SECRET,
-      clientUrl: env.VITE_APP_CLIENT_URL
+      clientUrl: env.VITE_APP_CLIENT_URL,
     },
   },
   component: {

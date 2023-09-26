@@ -7,12 +7,24 @@ const hasLoaded = ref(false);
 const page = ref(1);
 
 const props = defineProps({
-  data: Array,
+  data: {
+    type: Array,
+    default: null,
+  },
   // Define the columns dynamically with keys and labels
-  columns: Array,
+  columns: {
+    type: Array,
+    default: null,
+  },
   // Other props...
-  count: Number,
-  actions: Array,
+  count: {
+    type: Number,
+    default: 0,
+  },
+  actions: {
+    type: Array,
+    default: null,
+  },
 });
 
 const emitValues = ["search"];
@@ -24,8 +36,8 @@ const emit = defineEmits(["search", "action-event"]);
 
 const changeItemsPerPage = () => {
   page.value = 1;
-  search()
-}
+  search();
+};
 
 const totalItems = computed(() => {
   return props ? Math.ceil(props.count / itemsPerPage.value) : 0;
@@ -44,14 +56,14 @@ onMounted(() => {
   <v-card class="pa-6">
     <v-row class="justify-end">
       <v-text-field
+        v-model="filter"
         prepend-inner-icon="mdi-magnify"
         variant="outlined"
         style="max-width: 20%"
         name="Search"
-        @change="search"
-        v-model="filter"
         label="Search"
-      ></v-text-field>
+        @change="search"
+      />
     </v-row>
     <v-row style="justify-content: center">
       <v-table v-if="data.length !== 0">
@@ -70,12 +82,12 @@ onMounted(() => {
             </td>
             <td class="text-center">
               <v-btn
+                v-for="action in props.actions"
+                :key="action.label"
                 class="mx-2"
                 :color="
                   action.event.includes('delete') ? 'accent' : 'secondary'
                 "
-                v-for="action in props.actions"
-                :key="action.label"
                 @click="
                   $emit('action-event', {
                     event: action.event,
@@ -93,23 +105,22 @@ onMounted(() => {
     </v-row>
     <v-row class="justify-end mt-10">
       <v-select
+        v-model="itemsPerPage"
         style="max-width: 85px"
         class="mr-4"
-        v-model="itemsPerPage"
         :items="[5, 10, 25, 50]"
-        @update:modelValue="changeItemsPerPage"
         variant="outlined"
         label="Items Per Page"
-      >
-      </v-select>
+        @update:model-value="changeItemsPerPage"
+      />
       <v-pagination
-        class="w-auto mx-2"
         v-if="hasLoaded"
-        :length="totalItems"
         v-model="page"
-        @update:modelValue="search"
+        class="w-auto mx-2"
+        :length="totalItems"
         :total-visible="4"
-      ></v-pagination>
+        @update:model-value="search"
+      />
     </v-row>
   </v-card>
 </template>

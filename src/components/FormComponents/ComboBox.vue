@@ -2,7 +2,24 @@
 import { reactive, ref, onMounted } from "vue";
 import useVuelidate from "@vuelidate/core";
 
-const props = defineProps(["modelValue", "label", "items", "validators"]);
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+  label: {
+    type: String,
+    default: "",
+  },
+  items: {
+    type: Array,
+    default: null,
+  },
+  validators: {
+    type: Object,
+    default: null,
+  },
+});
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -25,14 +42,14 @@ onMounted(() => {
 <template>
   <v-combobox
     v-if="isMounted"
+    v-model="data[props.label]"
     class="pa-2"
     :name="props.label"
     :label="props.label"
     :items="props.items"
-    v-model="data[props.label]"
     :error-messages="v$[props.label].$errors.map((e) => e.$message)"
     @input="v$[props.label].$touch"
     @blur="v$[props.label].$touch"
-    @update:modelValue="emit('update:modelValue', data[props.label])"
-  ></v-combobox>
+    @update:model-value="emit('update:modelValue', data[props.label])"
+  />
 </template>

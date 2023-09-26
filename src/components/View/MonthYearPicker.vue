@@ -1,12 +1,21 @@
 <script setup>
 import { reactive, ref, onMounted } from "vue";
 import useVuelidate from "@vuelidate/core";
-import { required, email, helpers } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 
-const props = defineProps(["modelValue", "errors"]);
+// const props = defineProps(["modelValue", "errors"]);
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: null,
+  },
+  errors: {
+    type: Array,
+    default: null,
+  },
+});
+
 const emit = defineEmits(["update:modelValue", "deleteContact"]);
-
-const expanded = ref(false);
 
 const date = ref({
   month: "",
@@ -62,7 +71,7 @@ onMounted(() => {
   <v-expansion-panels class="w-auto mx-2 mb-4">
     <v-expansion-panel elevation="1" bg-color="grey-lighten-4">
       <v-expansion-panel-title class="">
-        <template v-slot:default="{ expanded }">
+        <template #default="{ expanded }">
           <v-row no-gutters class="align-center">
             <v-col cols="4" class="d-flex justify-start">
               Expected Graduation Date
@@ -93,30 +102,30 @@ onMounted(() => {
       <v-expansion-panel-text>
         <v-row class="ma-4">
           <v-select
+            v-model="date.month"
             name="month"
             label="Month"
-            v-model="date.month"
             class="pa-2"
             :items="months"
             item-title="name"
             item-value="number"
             :error-messages="v$.month.$errors.map((e) => e.$message)"
+            :return-object="false"
             @input="v$.month.$touch"
             @blur="v$.month.$touch"
             @update:model-value="updateDate"
-            :return-object="false"
-          ></v-select>
+          />
           <v-select
+            v-model="date.year"
             name="year"
             label="Year"
-            v-model="date.year"
             class="pa-2"
             :items="years"
             :error-messages="v$.year.$errors.map((e) => e.$message)"
             @input="v$.year.$touch"
             @blur="v$.year.$touch"
             @update:model-value="updateDate"
-          ></v-select>
+          />
         </v-row>
       </v-expansion-panel-text>
     </v-expansion-panel>

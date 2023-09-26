@@ -1,8 +1,25 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
-const props = defineProps(["items", "tabLabel", "infoLabels", "template"]);
-const objKeys = ref([]);
+const props = defineProps({
+  items: {
+    type: Array,
+    default: null,
+  },
+  tabLabel: {
+    type: String,
+    default: "",
+  },
+  infoLabels: {
+    type: Array,
+    default: null,
+  },
+  template: {
+    type: Object,
+    default: null,
+  },
+});
+
 const infoItems = ref([]);
 const currentTab = ref(1);
 
@@ -34,10 +51,13 @@ onMounted(() => {
           v-for="item in props.items"
           :key="props.items.indexOf(item)"
           :value="props.items.indexOf(item) + 1"
-          >{{ `${tabLabel} #${props.items.indexOf(item) + 1}` }}</v-tab
         >
+          {{ `${tabLabel} #${props.items.indexOf(item) + 1}` }}
+        </v-tab>
       </div>
-      <v-tab v-else :value="1">{{ `Primary ${props.tabLabel}` }}</v-tab>
+      <v-tab v-else :value="1">
+        {{ `Primary ${props.tabLabel}` }}
+      </v-tab>
     </v-tabs>
     <v-divider />
     <v-card-text>

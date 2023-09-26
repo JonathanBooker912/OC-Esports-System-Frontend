@@ -47,7 +47,9 @@ describe("tutorials", () => {
 
     it("can delete an added tutorial", () => {
       var rowCount;
-      cy.intercept("GET", "/EsportsAPI/tutorials/userTut/1").as("getAllForUser");
+      cy.intercept("GET", "/EsportsAPI/tutorials/userTut/1").as(
+        "getAllForUser",
+      );
       cy.visit("/tutorials");
       cy.wait("@getAllForUser");
       cy.get("tr").then((rows) => {
