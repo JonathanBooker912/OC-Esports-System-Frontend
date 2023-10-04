@@ -36,7 +36,6 @@ const actions = [
 ];
 
 const handleActionEvent = (payload) => {
-  console.log(payload.event);
   if (payload.event == "edit-team") viewTeam(payload.value);
 
   if (payload.event == "delete-team") {
@@ -49,7 +48,7 @@ const showConfirmDialog = () => {
   showConfirm.value = !showConfirm.value;
 };
 
-const getUsers = (itemsPerPage, page) => {
+const getTeams = (itemsPerPage, page) => {
   TeamServices.getAllTeams(itemsPerPage, page)
     .then((response) => {
       teams.value = response.data.rows;
@@ -57,7 +56,8 @@ const getUsers = (itemsPerPage, page) => {
     })
     .catch((err) => {
       // Create UI to add visual error checking
-      console.log(err);
+      errorMsg.value = err.message;
+      showError = true;
     });
 };
 
@@ -67,13 +67,14 @@ async function getTeamForID(teamId) {
       selectedTeam.value = response.data;
     })
     .catch((err) => {
-      console.log(err);
+      errorMsg.value = err.message;
+      showError = true;
     });
 }
 
 const search = (filter, itemsPerPage, page) => {
   if (filter == "" || filter == null) {
-    getUsers(itemsPerPage, page);
+    getTeams(itemsPerPage, page);
   } else {
     TeamServices.search(filter, itemsPerPage, page)
       .then((response) => {
@@ -81,7 +82,8 @@ const search = (filter, itemsPerPage, page) => {
         count.value = response.data.count;
       })
       .catch((err) => {
-        console.log(err);
+        errorMsg.value = err.message;
+        showError = true;
       });
   }
 };
@@ -94,8 +96,7 @@ const viewTeam = async (userId) => {
 const deleteTeam = () => {
   TeamServices.deleteTeam(teamToDelete.value)
     .then((response) => {
-      console.log("Team deleted:", response.data);
-      getUsers(5, 1);
+      getTeams(5, 1);
     })
     .catch((error) => {
       errorMsg.value = error.response.data.message;
@@ -111,16 +112,21 @@ const updateTeam = () => {
     }
    TeamServices.updateTeam(selectedTeam.value.id, updatedTeam)
     .then(response => {
-      getUsers(5,1)
+      getTeams(5,1)
     })
-    .catch(error => {
-      console.error("Error updating team:", error);
+    .catch((error) => {
       // Handle the error, like showing an error message
+      errorMsg.value = error.message;
+      showError = true;
     });
 }
 
+const reloadTable = (itemsPerPage) => {
+  getTeams(itemsPerPage, 1);
+}
+
 onMounted(() => {
-  getUsers(5, 1);
+  getTeams(5, 1);
 });
 </script>
 
@@ -136,6 +142,7 @@ onMounted(() => {
       :actions="actions"
       @action-event="handleActionEvent"
       @search="search"
+      @reload="reloadTable"
     ></DataTable>
     <ConfirmAction
       :show="showConfirm"

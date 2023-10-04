@@ -9,11 +9,12 @@ const users = ref([]);
 const count = ref();
 const dialog = ref(false);
 const user = ref({});
+const showError = ref(false);
+const errorMsg = ref("");
 
 const actions = [{ label: "View", event: "view-user" }];
 
 const handleActionEvent = (payload) => {
-  console.log(payload.event);
   if (payload.event == "view-user") viewUser(payload.value);
 };
 
@@ -25,7 +26,8 @@ const getUsers = (itemsPerPage, page) => {
     })
     .catch((err) => {
       // Create UI to add visual error checking
-      console.log(err);
+      errorMsg.value = err.message;
+      showError = true;
     });
 };
 
@@ -35,7 +37,8 @@ function getUserForID(userId) {
       user.value = response.data;
     })
     .catch((err) => {
-      console.log(err);
+      errorMsg.value = err.message;
+      showError = true;
     });
 }
 
@@ -49,10 +52,15 @@ const search = (filter, itemsPerPage, page) => {
         count.value = response.data.count;
       })
       .catch((err) => {
-        console.log(err);
+        errorMsg.value = err.message;
+        showError = true;
       });
   }
 };
+
+const reloadTable = (itemsPerPage) => {
+  getUsers(itemsPerPage, 1);
+}
 
 onMounted(() => {
   getUsers(5, 1);
@@ -77,6 +85,7 @@ const viewUser = (userId) => {
       @action-event="handleActionEvent"
       @view-user="viewUser"
       @search="search"
+      @reload="reloadTable"
     ></DataTable>
     <div class="text-center">
       <v-dialog
@@ -105,6 +114,16 @@ const viewUser = (userId) => {
         </v-card>
       </v-dialog>
     </div>
+    <v-dialog v-model="showError" width="auto">
+      <v-card>
+        <v-card-text>
+          {{ errorMsg }}
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="showError = false">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <style scoped></style>
