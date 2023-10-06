@@ -1,43 +1,28 @@
 <script setup>
-import MetricServices from "../../../services/metricServices.js";
+import TitleServices from "../../../services/titleServices";
 
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
 import TextField from "../../../components/FormComponents/TextField.vue";
-import ComboBox from "../../../components/FormComponents/ComboBox.vue";
-
-const props = defineProps({
-  titleId: {
-    type: Number,
-    default: -1,
-  },
-  dataTypes: {
-    type: Array,
-    default: []
-  },
-  metricTypes: {
-    type: Array,
-    default: []
-  }
-});
+import Select from "../../../components/FormComponents/SelectBox.vue";
 
 const validator = new FormValidator();
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
-    addMetric();
+    addTitle();
   } else {
     return;
   }
 };
 
-const addMetric = () => {
-  MetricServices.addMetric(metric.value)
+const addTitle = () => {
+  TitleServices.addTitle(title.value)
     .then((response) => {
       console.log(response);
-      if (response.status == 201) {
+      if (response.status == 200) {
         showDialog.value = true;
       } else {
         console.log(response);
@@ -52,44 +37,24 @@ const addMetric = () => {
 
 const errorMsg = ref("");
 const showDialog = ref(false);
-const titles = ref();
-const metric = ref({
-  titleId: props.titleId,
+const title = ref({
   name: "",
-  metricType: "",
-  dataType: "",
 });
 
 const resetAdd = () => {
   showDialog.value = false;
-  metric.value = {
-    titleId: props.titleId,
+  title.value = {
     name: "",
-    metricType: "",
-    dataType: "",
-  }
+  };
 };
-
 </script>
 
 <template>
   <div>
     <div class="w-75 mx-auto mt-4">
       <TextField
-        v-model="metric.name"
-        label="Metric Name"
-        :validators="{ required }"
-      />
-      <ComboBox
-        v-model="metric.metricType"
-        :items="props.metricTypes"
-        label="Metric Type"
-        :validators="{ required }"
-      />
-      <ComboBox
-        v-model="metric.dataType"
-        :items="props.dataTypes"
-        label="Data Type"
+        v-model="title.name"
+        label="Title Name"
         :validators="{ required }"
       />
     </div>
@@ -100,7 +65,7 @@ const resetAdd = () => {
     <v-dialog v-model="showDialog" width="auto">
       <v-card>
         <v-card-text>
-          {{ errorMsg ? errorMsg : "Successfully Added Metric!" }}
+          {{ errorMsg ? errorMsg : "Successfully Added Title!" }}
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" block @click="resetAdd"> OK </v-btn>

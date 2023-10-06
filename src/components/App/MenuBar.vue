@@ -25,6 +25,10 @@ const backgroundUrl = ref("");
 
 const maintainenceActions = [
   {
+    title: "Titles",
+    component: "maintainTitles",
+  },
+  {
     title: "Teams",
     component: "maintainTeams",
   },
