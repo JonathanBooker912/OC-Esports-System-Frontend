@@ -14,11 +14,11 @@ export default {
     return apiClient.delete("/match/" + matchId);
   },
   getAllMatches(pageSize, page) {
-    return apiClient.get(`/match?pageSize=${pageSize}&page=${page}`)
+    return apiClient.get(`/match?pageSize=${pageSize}&page=${page}`);
   },
-  search(filter, pageSize, page){
+  search(filter, pageSize, page) {
     return apiClient.get(
-      `/match?filter=${filter}&pageSize=${pageSize}&page=${page}`
-    )
-  }
+      `/match?filter=${filter}&pageSize=${pageSize}&page=${page}`,
+    );
+  },
 };

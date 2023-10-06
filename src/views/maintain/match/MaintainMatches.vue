@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref } from "vue";
 
 import ViewMatches from "./ViewMatches.vue";
 import AddMatch from "./AddMatch.vue";
@@ -7,13 +7,12 @@ import AddMatch from "./AddMatch.vue";
 const currentTab = ref("1");
 
 const switchCurrentTab = () => {
-  if (currentTab.value == "1"){
+  if (currentTab.value == "1") {
     currentTab.value = "2";
-  }
-  else {
+  } else {
     currentTab.value = "1";
   }
-}
+};
 </script>
 
 <script>
@@ -36,8 +35,10 @@ export default {
       </v-tabs>
       <v-divider />
       <v-window v-model="currentTab">
-        <v-window-item value="1"> <ViewMatches/> </v-window-item>
-       <v-window-item value="2"> <AddMatch @cancel="switchCurrentTab"/> </v-window-item>
+        <v-window-item value="1"> <ViewMatches /> </v-window-item>
+        <v-window-item value="2">
+          <AddMatch @cancel="switchCurrentTab" />
+        </v-window-item>
       </v-window>
     </v-card>
   </v-col>

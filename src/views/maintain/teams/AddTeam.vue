@@ -45,7 +45,7 @@ const team = ref({
   isFlagship: false,
   titleId: null,
 });
-  
+
 const getTitles = () => {
   TitleServices.getTitles().then((response) => {
     titles.value = response.data.map((title) => {

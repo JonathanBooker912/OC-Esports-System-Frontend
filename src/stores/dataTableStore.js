@@ -3,12 +3,12 @@ import { ref } from "vue";
 
 export const useMenuStore = defineStore("dataTableState", () => {
   const itemsPerPage = ref(5);
-  const page = ref(1)
+  const page = ref(1);
 
   function setItemsPerPage(value) {
     itemsPerPage.value = value;
   }
- 
+
   function setPage(value) {
     page.value = value;
   }

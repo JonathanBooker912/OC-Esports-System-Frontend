@@ -25,7 +25,7 @@ const getUsers = (itemsPerPage, page) => {
     .catch((err) => {
       // Create UI to add visual error checking
       errorMsg.value = err.message;
-      showError = true;
+      showError.value = true;
     });
 };
 
@@ -36,7 +36,7 @@ function getUserForID(userId) {
     })
     .catch((err) => {
       errorMsg.value = err.message;
-      showError = true;
+      showError.value = true;
     });
 }
 
@@ -51,14 +51,14 @@ const search = (filter, itemsPerPage, page) => {
       })
       .catch((err) => {
         errorMsg.value = err.message;
-        showError = true;
+        showError.value = true;
       });
   }
 };
 
 const reloadTable = (itemsPerPage) => {
   getUsers(itemsPerPage, 1);
-}
+};
 
 onMounted(() => {
   getUsers(5, 1);

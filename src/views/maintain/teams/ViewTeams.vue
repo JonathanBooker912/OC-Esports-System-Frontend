@@ -55,7 +55,7 @@ const getTeams = (itemsPerPage, page) => {
     .catch((err) => {
       // Create UI to add visual error checking
       errorMsg.value = err.message;
-      showError = true;
+      showError.value = true;
     });
 };
 
@@ -66,7 +66,7 @@ async function getTeamForID(teamId) {
     })
     .catch((err) => {
       errorMsg.value = err.message;
-      showError = true;
+      showError.value = true;
     });
 }
 
@@ -81,7 +81,7 @@ const search = (filter, itemsPerPage, page) => {
       })
       .catch((err) => {
         errorMsg.value = err.message;
-        showError = true;
+        showError.value = true;
       });
   }
 };
@@ -94,7 +94,7 @@ const viewTeam = async (userId) => {
 const deleteTeam = () => {
   TeamServices.deleteTeam(teamToDelete.value)
     .then(() => {
-      getUsers(5, 1);
+      getTeams(5, 1);
     })
     .catch((error) => {
       errorMsg.value = error.response.data.message;
@@ -104,24 +104,24 @@ const deleteTeam = () => {
 };
 
 const updateTeam = () => {
-    const updatedTeam = {
-      name: selectedTeam.value.name,
-      isFlagship: selectedTeam.value.isFlagship
-    }
-   TeamServices.updateTeam(selectedTeam.value.id, updatedTeam)
+  const updatedTeam = {
+    name: selectedTeam.value.name,
+    isFlagship: selectedTeam.value.isFlagship,
+  };
+  TeamServices.updateTeam(selectedTeam.value.id, updatedTeam)
     .then(() => {
-      getUsers(5,1)
+      getTeams(5, 1);
     })
     .catch((error) => {
       // Handle the error, like showing an error message
       errorMsg.value = error.message;
-      showError = true;
+      showError.value = true;
     });
-}
+};
 
 const reloadTable = (itemsPerPage) => {
   getTeams(itemsPerPage, 1);
-}
+};
 
 onMounted(() => {
   getTeams(5, 1);
