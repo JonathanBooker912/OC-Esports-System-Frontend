@@ -1,6 +1,5 @@
 <script setup>
 import TeamServices from "../../../services/teamServices.js";
-import TitleServices from "../../../services/titleServices";
 
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
@@ -9,92 +8,96 @@ import FormValidator from "../../../components/FormComponents/support/FormValida
 import TextField from "../../../components/FormComponents/TextField.vue";
 import Select from "../../../components/FormComponents/SelectBox.vue";
 
+import MatchServices from "../../../services/matchServices.js";
+
 const validator = new FormValidator();
+const emit = defineEmits(["cancel"]);
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
-    addTeam();
+    addMatch();
   } else {
     return;
   }
 };
 
-const addTeam = () => {
-  console.log(team.value);
-  TeamServices.addTeam(team.value)
+const addMatch = () => {
+  MatchServices.createMatch(match.value)
     .then((response) => {
-      console.log(response);
       if (response.status == 200) {
         showDialog.value = true;
       } else {
-        console.log(response);
         errorMsg.value = response.data.message;
       }
     })
-    .catch((error) => {
-      errorMsg.value = error.response.data.message;
+    .catch((err) => {
+      errorMsg.value = err.response.data.message;
       showDialog.value = true;
     });
 };
 
 const errorMsg = ref("");
 const showDialog = ref(false);
-const titles = ref();
-const team = ref({
+const teams = ref([]);
+const match = ref({
   name: "",
-  isFlagship: false,
-  titleId: null,
+  teamId: null,
 });
 
-const getTitles = () => {
-  TitleServices.getTitles().then((response) => {
-    titles.value = response.data.map((title) => {
-      return { name: title.name, value: title.id };
+const getTeams = () => {
+  TeamServices.getAllTeams()
+    .then((response) => {
+      teams.value = response.data.rows.map((team) => {
+        return { name: team.name, value: team.id };
+      });
+    })
+    .catch((err) => {
+      errorMsg.value = err.response.data.message;
+      showDialog.value = true;
     });
-  });
 };
 
 const resetAdd = () => {
   showDialog.value = false;
-  team.value = {
-    name: "",
-    isFlagship: false,
-    titleID: null,
-  };
+  match.value.name = "";
+  match.value.teamId = null;
+};
+
+const cancel = () => {
+  emit("cancel");
 };
 
 onMounted(() => {
-  getTitles();
+  getTeams();
 });
 </script>
 
 <template>
   <div>
     <div class="w-75 mx-auto mt-4">
-      <Select
-        v-model="team.titleId"
-        :items="titles"
-        label="Title"
-        :validators="{ required }"
-      />
       <TextField
-        v-model="team.name"
-        label="Team Name"
+        v-model="match.name"
+        label="Match Name"
         :validators="{ required }"
       />
-      <v-checkbox v-model="team.isFlagship" label="Is Flagship" />
+      <Select
+        v-model="match.teamId"
+        :items="teams"
+        label="Team"
+        :validators="{ required }"
+      />
     </div>
     <div class="text-center">
-      <v-btn color="primary" class="ma-4" @click="validateForm"> Save </v-btn>
-      <v-btn class="ma-4" @click="dialog = false"> Cancel </v-btn>
+      <v-btn color="primary" class="ma-4" @click="validateForm">Save</v-btn>
+      <v-btn class="ma-4" @click="cancel">Cancel</v-btn>
     </div>
     <v-dialog v-model="showDialog" width="auto">
       <v-card>
         <v-card-text>
-          {{ errorMsg ? errorMsg : "Successfully Added Team!" }}
+          {{ errorMsg ? errorMsg : "Successfully Added Match!" }}
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" block @click="resetAdd"> OK </v-btn>
+          <v-btn color="primary" block @click="resetAdd">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
