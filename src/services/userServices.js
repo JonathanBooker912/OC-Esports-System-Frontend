@@ -18,7 +18,7 @@ export default {
 
   search(filter, pageSize, page) {
     return apiClient.get(
-      `/user?filter=${filter}&pageSize=${pageSize}&page=${page}`
+      `/user?filter=${filter}&pageSize=${pageSize}&page=${page}`,
     );
   },
   getUserByEmail(email) {
@@ -35,7 +35,7 @@ export default {
   updateEmergencyContact(userId, contact) {
     return apiClient.put(
       `/user/${userId}/emergencyContacts/${contact.id}`,
-      contact
+      contact,
     );
   },
   getEmergencyContacts(userId) {

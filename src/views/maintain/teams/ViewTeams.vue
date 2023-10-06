@@ -1,8 +1,6 @@
 <script setup>
 import TeamServices from "../../../services/teamServices.js";
-import { useRouter } from "vue-router";
-import { ref, onMounted, computed } from "vue";
-import useVuelidate from "@vuelidate/core";
+import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
@@ -14,7 +12,7 @@ const validator = new FormValidator();
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
-    updateTeam()
+    updateTeam();
     dialog.value = false;
   } else {
     return;
@@ -95,8 +93,8 @@ const viewTeam = async (userId) => {
 
 const deleteTeam = () => {
   TeamServices.deleteTeam(teamToDelete.value)
-    .then((response) => {
-      getTeams(5, 1);
+    .then(() => {
+      getUsers(5, 1);
     })
     .catch((error) => {
       errorMsg.value = error.response.data.message;
@@ -111,8 +109,8 @@ const updateTeam = () => {
       isFlagship: selectedTeam.value.isFlagship
     }
    TeamServices.updateTeam(selectedTeam.value.id, updatedTeam)
-    .then(response => {
-      getTeams(5,1)
+    .then(() => {
+      getUsers(5,1)
     })
     .catch((error) => {
       // Handle the error, like showing an error message
@@ -154,7 +152,7 @@ onMounted(() => {
       <v-dialog v-model="dialog" class="w-50">
         <v-card v-if="dialog">
           <v-toolbar color="primary" title="Edit Team">
-            <v-btn icon="mdi-arrow-left" @click="dialog = false"></v-btn>
+            <v-btn icon="mdi-arrow-left" @click="dialog = false" />
           </v-toolbar>
           <v-card-text>
             <TextField
@@ -166,14 +164,14 @@ onMounted(() => {
               <v-checkbox
                 v-model="selectedTeam.isFlagship"
                 label="Is Flagship"
-              ></v-checkbox>
+              />
             </div>
           </v-card-text>
           <div class="text-center">
-            <v-btn color="primary" @click="validateForm" class="ma-4"
-              >Save</v-btn
-            >
-            <v-btn @click="dialog = false" class="ma-4">Cancel</v-btn>
+            <v-btn color="primary" class="ma-4" @click="validateForm">
+              Save
+            </v-btn>
+            <v-btn class="ma-4" @click="dialog = false"> Cancel </v-btn>
           </div>
         </v-card>
       </v-dialog>
@@ -184,7 +182,7 @@ onMounted(() => {
           {{ errorMsg }}
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" block @click="showError = false">OK</v-btn>
+          <v-btn color="primary" block @click="showError = false"> OK </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

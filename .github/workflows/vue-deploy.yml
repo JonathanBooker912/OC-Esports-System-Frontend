@@ -9,6 +9,7 @@ on:
 
 jobs:
   aws-deploy:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     env:
       VITE_APP_CLIENT_ID: ${{secrets.VUE_APP_CLIENT_ID}}

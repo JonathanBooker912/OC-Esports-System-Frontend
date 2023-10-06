@@ -2,7 +2,7 @@ import apiClient from "./services.js";
 
 export default {
   getAllForUser(userId) {
-    return apiClient.get("/user/${userId}/alias");
+    return apiClient.get(`/user/${userId}/alias`);
   },
   create(data, userId) {
     return apiClient.post("/user/" + userId + "/alias", data);

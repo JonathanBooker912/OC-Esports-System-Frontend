@@ -18,7 +18,7 @@ export default {
   },
   search(filter, pageSize, page) {
     return apiClient.get(
-      `/teams?filter=${filter}&pageSize=${pageSize}&page=${page}`
+      `/teams?filter=${filter}&pageSize=${pageSize}&page=${page}`,
     );
   },
 };

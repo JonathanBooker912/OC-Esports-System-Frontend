@@ -4,12 +4,9 @@ import AuthServices from "../../services/authServices";
 import UserServices from "../../services/userServices";
 import Utils from "../../config/utils.js";
 import { useRouter } from "vue-router";
-import userServices from "../../services/userServices";
 import { useMenuStore } from "../../stores/menuBarStore";
-import { storeToRefs } from "pinia";
 
 const store = useMenuStore();
-const isLoggedIn = storeToRefs(store);
 
 const router = useRouter();
 const fName = ref("");
@@ -19,7 +16,6 @@ const user = ref({});
 const loginWithGoogle = () => {
   window.handleCredentialResponse = handleCredentialResponse;
   const client = import.meta.env.VITE_APP_CLIENT_ID;
-  console.log(client);
   window.google.accounts.id.initialize({
     client_id: client,
     cancel_on_tap_outside: false,
@@ -72,7 +68,7 @@ onMounted(() => {
 <template>
   <div class="signup-buttons">
     <v-row justify="center">
-      <div display="flex" id="parent_id"></div>
+      <div id="parent_id" display="flex" />
     </v-row>
   </div>
 </template>

@@ -3,7 +3,12 @@ import { ref, onMounted } from "vue";
 import TextField from "../FormComponents/TextField.vue";
 import { required, email } from "@vuelidate/validators";
 
-const props = defineProps(["modelValue"]);
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
 
 const emit = defineEmits(["update:modelValue", "emailRemoved"]);
 
@@ -19,10 +24,10 @@ onMounted(() => {
 <template>
   <v-row v-if="isMounted" class="align-center">
     <TextField
-      label="Email"
       v-model="emailValue"
+      label="Email"
       :validators="{ required, email }"
-      @update:modelValue="emit('update:modelValue', emailValue)"
+      @update:model-value="emit('update:modelValue', emailValue)"
     />
     <v-icon class="pb-5" @click="emit('emailRemoved')"> mdi-close </v-icon>
   </v-row>
