@@ -8,6 +8,7 @@ import PlayerInfo from "./views/PlayerInfo.vue";
 import ViewAlias from "./views/ViewAlias.vue";
 import MaintainUsers from "./views/maintain/users/MaintainUsers.vue";
 import MaintainTeams from "./views/maintain/teams/MaintainTeams.vue";
+import MaintainMatches from "./views/maintain/match/MaintainMatches.vue";
 import MaintainTitleMetrics from "./views/maintain/metrics/MaintainTitleMetrics.vue";
 
 import AuthServices from "./services/authServices.js";
@@ -73,6 +74,12 @@ const router = createRouter({
       path: "/maintain/teams",
       name: "maintainTeams",
       component: MaintainTeams,
+      props: true,
+    },
+    {
+      path: "/maintainMatches",
+      name: "maintainMatches",
+      component: MaintainMatches,
       props: true,
     },
     {
