@@ -36,6 +36,10 @@ const maintainenceActions = [
     title: "Users",
     component: "maintainUsers",
   },
+  {
+    title: "Matches",
+    component: "maintainMatches",
+  },
 ];
 
 const userDetailsLoaded = ref(false);

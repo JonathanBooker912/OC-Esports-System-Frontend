@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { storeToRefs } from "pinia";
+import { useDataTableStore } from "../stores/dataTableStore.js";
 
+const store = useDataTableStore();
+const { itemsPerPage, page } = storeToRefs(store);
 const filter = ref();
-const itemsPerPage = ref(5);
 const hasLoaded = ref(false);
-const page = ref(1);
 
 const props = defineProps({
   data: {
@@ -32,10 +34,9 @@ props.actions
   .map((action) => action.event)
   .forEach((event) => emitValues.push(event));
 
-const emit = defineEmits(["search", "action-event"]);
+const emit = defineEmits(["search", "action-event", "reload"]);
 
 const changeItemsPerPage = () => {
-  page.value = 1;
   search();
 };
 
@@ -44,7 +45,11 @@ const totalItems = computed(() => {
 });
 
 function search() {
-  emit("search", filter.value, itemsPerPage.value, page.value);
+  emit("search", filter.value);
+}
+
+function reload() {
+  emit("reload");
 }
 
 onMounted(() => {
@@ -54,7 +59,15 @@ onMounted(() => {
 
 <template>
   <v-card class="pa-6">
-    <v-row class="justify-end">
+    <v-row class="justify-space-between">
+      <v-btn
+        name="Reload"
+        style="max-width: 15%"
+        variant="outlined"
+        prepend-icon="mdi-refresh"
+        @click="reload"
+        >Reload</v-btn
+      >
       <v-text-field
         v-model="filter"
         prepend-inner-icon="mdi-magnify"

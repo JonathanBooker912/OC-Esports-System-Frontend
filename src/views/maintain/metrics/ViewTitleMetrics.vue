@@ -7,7 +7,13 @@ import FormValidator from "../../../components/FormComponents/support/FormValida
 import DataTable from "../../../components/DataTable.vue";
 import ConfirmAction from "../../../components/ConfirmAction.vue";
 import TextField from "../../../components/FormComponents/TextField.vue";
-import ComboBox from "../../../components/FormComponents/ComboBox.vue"
+import ComboBox from "../../../components/FormComponents/ComboBox.vue";
+
+import { useDataTableStore } from "../../../stores/dataTableStore.js";
+import { storeToRefs } from "pinia";
+
+const store = useDataTableStore();
+const { itemsPerPage, page } = storeToRefs(store);
 
 const validator = new FormValidator();
 
@@ -18,12 +24,12 @@ const props = defineProps({
   },
   dataTypes: {
     type: Array,
-    default: []
+    default: null,
   },
   metricTypes: {
     type: Array,
-    default: []
-  }
+    default: null,
+  },
 });
 
 const validateForm = async () => {
@@ -65,11 +71,16 @@ const showConfirmDialog = () => {
   showConfirm.value = !showConfirm.value;
 };
 
-const getMetrics = (itemsPerPage, page) => {
-  MetricServices.getMetricsForTitle(props.titleId)
+const getMetrics = () => {
+  MetricServices.getMetricsForTitle(
+    props.titleId,
+    itemsPerPage.value,
+    page.value,
+  )
     .then((response) => {
-      metrics.value = response.data;
-      count.value = response.data.length;
+      console.log(response);
+      metrics.value = response.data.rows;
+      count.value = response.data.count;
     })
     .catch((err) => {
       // Create UI to add visual error checking
@@ -87,11 +98,11 @@ async function getMetricForId(metricId) {
     });
 }
 
-const search = (filter, itemsPerPage, page) => {
+const search = (filter) => {
   if (filter == "" || filter == null) {
-    getMetrics(itemsPerPage, page);
+    getMetrics(itemsPerPage.value, page.value);
   } else {
-    MetricServices.search(filter, itemsPerPage, page)
+    MetricServices.search(props.titleId, filter, itemsPerPage.value, page.value)
       .then((response) => {
         metrics.value = response.data.rows;
         count.value = response.data.count;
@@ -109,11 +120,11 @@ const viewMetric = async (metricId) => {
 
 const deleteMetric = () => {
   MetricServices.deleteMetric(metricToDelete.value)
-    .then((response) => {
+    .then(() => {
       getMetrics(5, 1);
     })
     .catch((error) => {
-      console.log(error)
+      console.log(error);
       errorMsg.value = error.response.data.message;
       showError.value = true;
     });
@@ -121,7 +132,7 @@ const deleteMetric = () => {
 };
 
 const updateMetric = () => {
-  const updatedMetric = {...selectedMetric.value};
+  const updatedMetric = { ...selectedMetric.value };
 
   MetricServices.updateMetric(selectedMetric.value.id, updatedMetric)
     .then(() => {
