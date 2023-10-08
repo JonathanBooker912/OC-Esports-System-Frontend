@@ -1,13 +1,13 @@
 <script setup>
-import MetricServices from "../../../services/metricServices.js";
+import TitleServices from "../../../services/titleServices.js";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
 import DataTable from "../../../components/DataTable.vue";
 import ConfirmAction from "../../../components/ConfirmAction.vue";
 import TextField from "../../../components/FormComponents/TextField.vue";
-import ComboBox from "../../../components/FormComponents/ComboBox.vue";
 
 import { useDataTableStore } from "../../../stores/dataTableStore.js";
 import { storeToRefs } from "pinia";
@@ -15,54 +15,46 @@ import { storeToRefs } from "pinia";
 const store = useDataTableStore();
 const { itemsPerPage, page } = storeToRefs(store);
 
-const validator = new FormValidator();
+const router = useRouter();
 
-const props = defineProps({
-  titleId: {
-    type: Number,
-    default: -1,
-  },
-  dataTypes: {
-    type: Array,
-    default: null,
-  },
-  metricTypes: {
-    type: Array,
-    default: null,
-  },
-});
+const validator = new FormValidator();
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
-    updateMetric();
+    updateTitle();
     dialog.value = false;
   } else {
     return;
   }
 };
 
-const metrics = ref([]);
+const titles = ref([]);
 const count = ref(5);
-
 const dialog = ref(false);
 const showConfirm = ref(false);
-
-const selectedMetric = ref({});
-const metricToDelete = ref(null);
-
+const selectedTeam = ref({});
+const teamToDelete = ref(null);
 const errorMsg = ref("");
 const showError = ref(false);
 
 const actions = [
-  { label: "Edit", event: "edit-team" },
-  { label: "Delete", event: "delete-team" },
+  { label: "Edit", event: "edit-title" },
+  { label: "Metrics", event: "maintain-metrics" },
+  { label: "Delete", event: "delete-title" },
 ];
 
 const handleActionEvent = (payload) => {
-  if (payload.event == "edit-team") viewMetric(payload.value);
+  if (payload.event == "edit-title") viewTitle(payload.value);
 
-  if (payload.event == "delete-team") {
-    metricToDelete.value = payload.value;
+  if (payload.event == "maintain-metrics") {
+    router.push({
+      name: "maintainTitleMetrics",
+      params: { titleId: payload.value },
+    });
+  }
+
+  if (payload.event == "delete-title") {
+    teamToDelete.value = payload.value;
     showConfirmDialog();
   }
 };
@@ -71,15 +63,10 @@ const showConfirmDialog = () => {
   showConfirm.value = !showConfirm.value;
 };
 
-const getMetrics = () => {
-  MetricServices.getMetricsForTitle(
-    props.titleId,
-    itemsPerPage.value,
-    page.value,
-  )
+const getTitles = () => {
+  TitleServices.getTitles(itemsPerPage.value, page.value)
     .then((response) => {
-      console.log(response);
-      metrics.value = response.data.rows;
+      titles.value = response.data.rows;
       count.value = response.data.count;
     })
     .catch((err) => {
@@ -88,10 +75,10 @@ const getMetrics = () => {
     });
 };
 
-async function getMetricForId(metricId) {
-  await MetricServices.getMetric(metricId)
+async function getTitleForId(teamId) {
+  await TitleServices.getTitle(teamId)
     .then((response) => {
-      selectedMetric.value = response.data;
+      selectedTeam.value = response.data;
     })
     .catch((err) => {
       console.log(err);
@@ -100,11 +87,11 @@ async function getMetricForId(metricId) {
 
 const search = (filter) => {
   if (filter == "" || filter == null) {
-    getMetrics(itemsPerPage.value, page.value);
+    getTitles();
   } else {
-    MetricServices.search(props.titleId, filter, itemsPerPage.value, page.value)
+    TitleServices.search(filter, itemsPerPage.value, page.value)
       .then((response) => {
-        metrics.value = response.data.rows;
+        titles.value = response.data.rows;
         count.value = response.data.count;
       })
       .catch((err) => {
@@ -113,30 +100,31 @@ const search = (filter) => {
   }
 };
 
-const viewMetric = async (metricId) => {
-  await getMetricForId(metricId);
+const viewTitle = async (userId) => {
+  await getTitleForId(userId);
   dialog.value = true;
 };
 
-const deleteMetric = () => {
-  MetricServices.deleteMetric(metricToDelete.value)
+const deleteTitle = () => {
+  TitleServices.deleteTitle(teamToDelete.value)
     .then(() => {
-      getMetrics(5, 1);
+      getTitles(5, 1);
     })
     .catch((error) => {
-      console.log(error);
       errorMsg.value = error.response.data.message;
       showError.value = true;
     });
   showConfirmDialog();
 };
 
-const updateMetric = () => {
-  const updatedMetric = { ...selectedMetric.value };
-
-  MetricServices.updateMetric(selectedMetric.value.id, updatedMetric)
+const updateTitle = () => {
+  const updatedTeam = {
+    name: selectedTeam.value.name,
+    isFlagship: selectedTeam.value.isFlagship,
+  };
+  TitleServices.updateTitle(selectedTeam.value.id, updatedTeam)
     .then(() => {
-      getMetrics(5, 1);
+      getTitles(5, 1);
     })
     .catch((error) => {
       console.error("Error updating team:", error);
@@ -145,24 +133,20 @@ const updateMetric = () => {
 };
 
 const reloadTable = () => {
-  getMetrics();
+  getTitles();
 };
 
 onMounted(() => {
-  getMetrics();
+  getTitles();
 });
 </script>
 
 <template>
   <div>
     <DataTable
-      :data="metrics"
+      :data="titles"
       :count="count"
-      :columns="[
-        { key: 'name', label: 'Name' },
-        { key: 'metricType', label: 'Metric Type' },
-        { key: 'dataType', label: 'Data Type' },
-      ]"
+      :columns="[{ key: 'name', label: 'Name' }]"
       :actions="actions"
       @action-event="handleActionEvent"
       @search="search"
@@ -171,31 +155,19 @@ onMounted(() => {
     <ConfirmAction
       :show="showConfirm"
       action="Delete"
-      @action="deleteMetric"
+      @action="deleteTitle"
       @cancel="showConfirmDialog"
     />
     <div class="text-center">
       <v-dialog v-model="dialog" class="w-50">
         <v-card v-if="dialog">
-          <v-toolbar color="primary" title="Edit Team">
+          <v-toolbar color="primary" title="Edit Title">
             <v-btn icon="mdi-arrow-left" @click="dialog = false" />
           </v-toolbar>
           <v-card-text>
             <TextField
-              v-model="selectedMetric.name"
-              label="Team Name"
-              :validators="{ required }"
-            />
-            <ComboBox
-              v-model="selectedMetric.metricType"
-              :items="props.metricTypes"
-              label="Metric Type"
-              :validators="{ required }"
-            />
-            <ComboBox
-              v-model="selectedMetric.dataType"
-              :items="props.dataTypes"
-              label="Data Type"
+              v-model="selectedTeam.name"
+              label="Title Name"
               :validators="{ required }"
             />
           </v-card-text>

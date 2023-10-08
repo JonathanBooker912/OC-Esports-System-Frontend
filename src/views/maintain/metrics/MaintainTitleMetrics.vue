@@ -46,7 +46,7 @@ export default {
 
 <template>
   <v-col v-if="title.name" :cols="cols" class="mx-auto">
-    <h1>{{ title.name }} Metrics</h1>
+    <h1 class="mb-2">{{ title.name }} Metrics</h1>
     <v-card>
       <v-tabs v-model="currentTab" color="primary" dark slider-color="primary">
         <v-tab value="1"> View Metrics </v-tab>
