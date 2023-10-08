@@ -9,6 +9,12 @@ import DataTable from "../../../components/DataTable.vue";
 import ConfirmAction from "../../../components/ConfirmAction.vue";
 import TextField from "../../../components/FormComponents/TextField.vue";
 
+import { useDataTableStore } from "../../../stores/dataTableStore.js";
+import { storeToRefs } from "pinia";
+
+const store = useDataTableStore();
+const { itemsPerPage, page } = storeToRefs(store);
+
 const router = useRouter();
 
 const validator = new FormValidator();
@@ -54,11 +60,11 @@ const showConfirmDialog = () => {
   showConfirm.value = !showConfirm.value;
 };
 
-const getTitles = (itemsPerPage, page) => {
-  TitleServices.getTitles(itemsPerPage, page)
+const getTitles = () => {
+  TitleServices.getTitles(itemsPerPage.value, page.value)
     .then((response) => {
-      titles.value = response.data;
-      count.value = response.data.length;
+      titles.value = response.data.rows;
+      count.value = response.data.count;
     })
     .catch((err) => {
       // Create UI to add visual error checking
@@ -76,11 +82,11 @@ async function getTitleForId(teamId) {
     });
 }
 
-const search = (filter, itemsPerPage, page) => {
+const search = (filter) => {
   if (filter == "" || filter == null) {
-    getTitles(itemsPerPage, page);
+    getTitles();
   } else {
-    TitleServices.search(filter, itemsPerPage, page)
+    TitleServices.search(filter, itemsPerPage.value, page.value)
       .then((response) => {
         titles.value = response.data.rows;
         count.value = response.data.count;
@@ -123,8 +129,12 @@ const updateTitle = () => {
     });
 };
 
+const reloadTable = (itemsPerPage) => {
+  getTitles();
+};
+
 onMounted(() => {
-  getTitles(5, 1);
+  getTitles();
 });
 </script>
 
@@ -139,6 +149,7 @@ onMounted(() => {
       :actions="actions"
       @action-event="handleActionEvent"
       @search="search"
+      @reload="reloadTable"
     />
     <ConfirmAction
       :show="showConfirm"

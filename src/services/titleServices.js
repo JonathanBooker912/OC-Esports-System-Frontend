@@ -10,10 +10,15 @@ export default {
   deleteTitle(titleId) {
     return apiClient.delete(`/titles/${titleId}`);
   },
-  getTitles() {
-    return apiClient.get("/titles/");
+  getTitles(pageSize, page) {
+    return apiClient.get(`/titles?pageSize=${pageSize}&page=${page}`);
   },
   addTitle(title) {
     return apiClient.post("/titles/", title);
+  },
+  search(filter, pageSize, page) {
+    return apiClient.get(
+      `/titles?filter=${filter}&pageSize=${pageSize}&page=${page}`,
+    );
   },
 };

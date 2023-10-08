@@ -144,8 +144,12 @@ const updateMetric = () => {
     });
 };
 
+const reloadTable = (itemsPerPage) => {
+  getMetrics();
+};
+
 onMounted(() => {
-  getMetrics(5, 1);
+  getMetrics();
 });
 </script>
 
@@ -162,6 +166,7 @@ onMounted(() => {
       :actions="actions"
       @action-event="handleActionEvent"
       @search="search"
+      @reload="reloadTable"
     />
     <ConfirmAction
       :show="showConfirm"
