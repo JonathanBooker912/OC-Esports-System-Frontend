@@ -5,7 +5,7 @@ import TeamServices from "../../../services/teamServices.js";
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
-import { useMenuStore } from "../../../stores/dataTableStore.js";
+import { useDataTableStore } from "../../../stores/dataTableStore.js";
 
 import DataTable from "../../../components/DataTable.vue";
 import ConfirmAction from "../../../components/ConfirmAction.vue";
@@ -13,7 +13,7 @@ import TextField from "../../../components/FormComponents/TextField.vue";
 import Select from "../../../components/FormComponents/SelectBox.vue";
 import { storeToRefs } from "pinia";
 
-const store = useMenuStore();
+const store = useDataTableStore();
 const { itemsPerPage, page } = storeToRefs(store);
 
 const validator = new FormValidator();

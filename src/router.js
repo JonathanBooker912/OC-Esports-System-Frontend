@@ -86,7 +86,7 @@ const router = createRouter({
       path: "/maintain/titles/:titleId/metrics",
       name: "maintainTitleMetrics",
       component: MaintainTitleMetrics,
-      props: route => ({ titleId: Number(route.params.titleId) }),
+      props: (route) => ({ titleId: Number(route.params.titleId) }),
     },
   ],
 });

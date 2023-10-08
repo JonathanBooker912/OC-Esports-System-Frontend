@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useMenuStore } from "../stores/dataTableStore.js";
+import { useDataTableStore } from "../stores/dataTableStore.js";
 
-const store = useMenuStore();
+const store = useDataTableStore();
 const { itemsPerPage, page } = storeToRefs(store);
 const filter = ref();
 const hasLoaded = ref(false);

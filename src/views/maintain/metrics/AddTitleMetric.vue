@@ -1,7 +1,7 @@
 <script setup>
 import MetricServices from "../../../services/metricServices.js";
 
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
@@ -15,12 +15,12 @@ const props = defineProps({
   },
   dataTypes: {
     type: Array,
-    default: []
+    default: null,
   },
   metricTypes: {
     type: Array,
-    default: []
-  }
+    default: null,
+  },
 });
 
 const validator = new FormValidator();
@@ -52,7 +52,6 @@ const addMetric = () => {
 
 const errorMsg = ref("");
 const showDialog = ref(false);
-const titles = ref();
 const metric = ref({
   titleId: props.titleId,
   name: "",
@@ -67,9 +66,8 @@ const resetAdd = () => {
     name: "",
     metricType: "",
     dataType: "",
-  }
+  };
 };
-
 </script>
 
 <template>

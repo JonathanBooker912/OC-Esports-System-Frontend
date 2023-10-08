@@ -13,13 +13,20 @@ export default {
   deleteMetric(id) {
     return apiClient.delete(`/metrics/${id}`);
   },
-  getMetricsForTitle(titleId) {
-    return apiClient.get(`/metrics/title/${titleId}`);
+  getMetricsForTitle(titleId, pageSize, page) {
+    return apiClient.get(
+      `/metrics/title/${titleId}?pageSize=${pageSize}&page=${page}`,
+    );
   },
   getMetricTypes() {
     return apiClient.get("/metrics/values/metricTypes");
   },
   getDataTypes() {
     return apiClient.get("/metrics/values/dataTypes");
+  },
+  search(titleId, filter, pageSize, page) {
+    return apiClient.get(
+      `/metrics/title/${titleId}?filter=${filter}&pageSize=${pageSize}&page=${page}`,
+    );
   },
 };

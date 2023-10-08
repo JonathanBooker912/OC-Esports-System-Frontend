@@ -4,24 +4,23 @@ import { onMounted, ref } from "vue";
 import ViewMetrics from "./ViewTitleMetrics.vue";
 import AddMetric from "./AddTitleMetric.vue";
 
-import MetricServices from '../../../services/metricServices';
+import MetricServices from "../../../services/metricServices";
 import TitleServices from "../../../services/titleServices";
 
 const props = defineProps({
   titleId: {
     type: Number,
     default: -1,
-  }
+  },
 });
 
-const title = ref({})
+const title = ref({});
 const currentTab = ref("1");
 
 const metricTypes = ref([]);
-const dataTypes = ref([]); 
+const dataTypes = ref([]);
 
-
-onMounted(async ()=>{ 
+onMounted(async () => {
   MetricServices.getDataTypes().then((response) => {
     dataTypes.value = response.data;
   });
@@ -30,9 +29,9 @@ onMounted(async ()=>{
   });
   TitleServices.getTitle(props.titleId).then((response) => {
     title.value = response.data;
-  })
-})
-</script> 
+  });
+});
+</script>
 
 <script>
 export default {
@@ -46,8 +45,8 @@ export default {
 </script>
 
 <template>
-  <v-col :cols="cols" class="mx-auto" v-if="title.name">
-    <h1>{{title.name}} Metrics</h1>
+  <v-col v-if="title.name" :cols="cols" class="mx-auto">
+    <h1>{{ title.name }} Metrics</h1>
     <v-card>
       <v-tabs v-model="currentTab" color="primary" dark slider-color="primary">
         <v-tab value="1"> View Metrics </v-tab>
@@ -56,18 +55,18 @@ export default {
       <v-divider />
       <v-window v-model="currentTab">
         <v-window-item value="1">
-          <ViewMetrics 
-            :titleId="props.titleId"
-            :dataTypes="dataTypes"
-            :metricTypes="metricTypes"
+          <ViewMetrics
+            :title-id="props.titleId"
+            :data-types="dataTypes"
+            :metric-types="metricTypes"
           />
         </v-window-item>
 
         <v-window-item value="2">
-          <AddMetric 
-            :titleId="props.titleId"
-            :dataTypes="dataTypes"
-            :metricTypes="metricTypes"
+          <AddMetric
+            :title-id="props.titleId"
+            :data-types="dataTypes"
+            :metric-types="metricTypes"
           />
         </v-window-item>
       </v-window>

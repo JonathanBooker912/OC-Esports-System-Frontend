@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useMenuStore = defineStore("dataTableState", () => {
+export const useDataTableStore = defineStore("dataTableState", () => {
   const itemsPerPage = ref(5);
   const page = ref(1);
 
