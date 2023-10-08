@@ -39,15 +39,18 @@ const showError = ref(false);
 
 const actions = [
   { label: "Edit", event: "edit-title" },
-  { label: "Metrics", event: "maintain-metrics"},
+  { label: "Metrics", event: "maintain-metrics" },
   { label: "Delete", event: "delete-title" },
 ];
 
 const handleActionEvent = (payload) => {
   if (payload.event == "edit-title") viewTitle(payload.value);
 
-  if(payload.event == "maintain-metrics"){
-    router.push({ name: "maintainTitleMetrics", params: {titleId: payload.value}})
+  if (payload.event == "maintain-metrics") {
+    router.push({
+      name: "maintainTitleMetrics",
+      params: { titleId: payload.value },
+    });
   }
 
   if (payload.event == "delete-title") {
@@ -129,7 +132,7 @@ const updateTitle = () => {
     });
 };
 
-const reloadTable = (itemsPerPage) => {
+const reloadTable = () => {
   getTitles();
 };
 
@@ -143,9 +146,7 @@ onMounted(() => {
     <DataTable
       :data="titles"
       :count="count"
-      :columns="[
-        { key: 'name', label: 'Name' },
-      ]"
+      :columns="[{ key: 'name', label: 'Name' }]"
       :actions="actions"
       @action-event="handleActionEvent"
       @search="search"

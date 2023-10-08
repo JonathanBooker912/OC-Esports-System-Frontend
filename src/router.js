@@ -82,7 +82,7 @@ const router = createRouter({
       name: "maintainTitles",
       component: MaintainTitles,
       props: true,
-    },    
+    },
     {
       path: "/maintainMatches",
       name: "maintainMatches",

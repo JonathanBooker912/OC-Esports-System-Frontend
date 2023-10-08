@@ -144,7 +144,7 @@ const updateMetric = () => {
     });
 };
 
-const reloadTable = (itemsPerPage) => {
+const reloadTable = () => {
   getMetrics();
 };
 
