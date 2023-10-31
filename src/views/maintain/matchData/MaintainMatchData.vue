@@ -26,7 +26,7 @@ onMounted(async () => {
     titleId = response.data.team.titleId;
   });
 
-  MetricServices.getAllMetricsForTitle(titleId).then((response) => {
+  MetricServices.getAllMatchMetricsForTitle(titleId).then((response) => {
     metrics.value = response.data.map((metric) => {
       return { name: metric.name, value: metric.id };
     });
