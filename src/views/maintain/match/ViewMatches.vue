@@ -158,8 +158,6 @@ const reloadTable = (itemsPerPage) => {
   getMatches(itemsPerPage, 1);
 };
 
-const viewMetrics = () => {};
-
 onMounted(() => {
   getMatches(5, 1);
   getTeams();
