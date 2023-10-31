@@ -18,6 +18,9 @@ export default {
       `/metrics/title/${titleId}?pageSize=${pageSize}&page=${page}`,
     );
   },
+  getAllMetricsForTitle(titleId) {
+    return apiClient.get(`/metrics/title/${titleId}/all`);
+  },
   getMetricTypes() {
     return apiClient.get("/metrics/values/metricTypes");
   },
