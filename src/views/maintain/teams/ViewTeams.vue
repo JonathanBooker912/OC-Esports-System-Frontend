@@ -3,10 +3,15 @@ import TeamServices from "../../../services/teamServices.js";
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
+import { useDataTableStore } from "../../../stores/dataTableStore";
+import { storeToRefs } from "pinia";
 
 import DataTable from "../../../components/DataTable.vue";
 import ConfirmAction from "../../../components/ConfirmAction.vue";
 import TextField from "../../../components/FormComponents/TextField.vue";
+
+const store = useDataTableStore();
+const { itemsPerPage, page } = storeToRefs(store);
 
 const validator = new FormValidator();
 
@@ -46,8 +51,8 @@ const showConfirmDialog = () => {
   showConfirm.value = !showConfirm.value;
 };
 
-const getTeams = (itemsPerPage, page) => {
-  TeamServices.getAllTeams(itemsPerPage, page)
+const getTeams = () => {
+  TeamServices.getAllTeams(itemsPerPage.value, page.value)
     .then((response) => {
       teams.value = response.data.rows;
       count.value = response.data.count;
@@ -70,11 +75,11 @@ async function getTeamForID(teamId) {
     });
 }
 
-const search = (filter, itemsPerPage, page) => {
+const search = (filter) => {
   if (filter == "" || filter == null) {
-    getTeams(itemsPerPage, page);
+    getTeams(itemsPerPage.value, page.value);
   } else {
-    TeamServices.search(filter, itemsPerPage, page)
+    TeamServices.search(filter, itemsPerPage.value, page.value)
       .then((response) => {
         teams.value = response.data.rows;
         count.value = response.data.count;
@@ -119,8 +124,8 @@ const updateTeam = () => {
     });
 };
 
-const reloadTable = (itemsPerPage) => {
-  getTeams(itemsPerPage, 1);
+const reloadTable = () => {
+  getTeams(itemsPerPage.value, 1);
 };
 
 onMounted(() => {
