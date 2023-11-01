@@ -23,6 +23,7 @@ const dataTypes = ref([]);
 onMounted(async () => {
   MetricServices.getDataTypes().then((response) => {
     dataTypes.value = response.data;
+    console.log(response.data);
   });
   MetricServices.getMetricTypes().then((response) => {
     metricTypes.value = response.data;

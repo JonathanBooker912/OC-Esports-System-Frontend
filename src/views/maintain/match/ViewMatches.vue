@@ -4,6 +4,7 @@ import TeamServices from "../../../services/teamServices.js";
 
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
+import { useRouter } from "vue-router";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 import { useDataTableStore } from "../../../stores/dataTableStore.js";
 
@@ -15,6 +16,8 @@ import { storeToRefs } from "pinia";
 
 const store = useDataTableStore();
 const { itemsPerPage, page } = storeToRefs(store);
+
+const router = useRouter();
 
 const validator = new FormValidator();
 
@@ -39,11 +42,19 @@ const teams = ref([]);
 
 const actions = [
   { label: "Edit", event: "edit-match" },
+  { label: "View MatchData", event: "view-matchData" },
   { label: "Delete", event: "delete-match" },
 ];
 
 const handleActionEvent = (payload) => {
   if (payload.event == "edit-match") viewMatch(payload.value);
+
+  if (payload.event == "view-matchData") {
+    router.push({
+      name: "maintainMatchData",
+      params: { matchId: payload.value },
+    });
+  }
 
   if (payload.event == "delete-match") {
     matchToDelete.value = payload.value;
@@ -58,6 +69,7 @@ const showConfirmDialog = () => {
 const getMatches = (itemsPerPage, page) => {
   MatchServices.getAllMatches(itemsPerPage, page)
     .then((response) => {
+      console.log(response.data.rows);
       matches.value = response.data.rows;
       count.value = response.data.count;
     })
