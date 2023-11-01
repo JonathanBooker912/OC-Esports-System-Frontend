@@ -2,6 +2,11 @@
 import UserServices from "../../../services/userServices.js";
 import { ref, onMounted } from "vue";
 import DataTable from "../../../components/DataTable.vue";
+import { useDataTableStore } from "../../../stores/dataTableStore.js";
+import { storeToRefs } from "pinia";
+
+const store = useDataTableStore();
+const { itemsPerPage, page } = storeToRefs(store);
 
 const users = ref([]);
 const count = ref();
@@ -40,11 +45,11 @@ function getUserForID(userId) {
     });
 }
 
-const search = (filter, itemsPerPage, page) => {
+const search = (filter) => {
   if (filter == "" || filter == null) {
-    getUsers(itemsPerPage, page);
+    getUsers(itemsPerPage.value, page.value);
   } else {
-    UserServices.search(filter, itemsPerPage, page)
+    UserServices.search(filter, itemsPerPage.value, page.value)
       .then((response) => {
         users.value = response.data.rows;
         count.value = response.data.count;
@@ -56,8 +61,8 @@ const search = (filter, itemsPerPage, page) => {
   }
 };
 
-const reloadTable = (itemsPerPage) => {
-  getUsers(itemsPerPage, 1);
+const reloadTable = () => {
+  getUsers(itemsPerPage.value, 1);
 };
 
 onMounted(() => {
