@@ -4,8 +4,8 @@ export default {
   getTeam(id) {
     return apiClient.get(`/teams/${id}`);
   },
-  getAllTeams() {
-    return apiClient.get("/teams/");
+  getAllTeams(pageSize, page) {
+    return apiClient.get(`/teams?pageSize=${pageSize}&page=${page}`);
   },
   addTeam(team) {
     return apiClient.post("/teams/", team);
