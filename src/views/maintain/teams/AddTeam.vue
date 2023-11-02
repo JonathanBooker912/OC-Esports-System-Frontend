@@ -1,8 +1,7 @@
 <script setup>
 import TeamServices from "../../../services/teamServices.js";
-import TitleServices from "../../../services/titleServices";
 
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
@@ -10,6 +9,15 @@ import TextField from "../../../components/FormComponents/TextField.vue";
 import Select from "../../../components/FormComponents/SelectBox.vue";
 
 const validator = new FormValidator();
+
+const props = defineProps({
+  titles: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
+});
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
@@ -20,14 +28,11 @@ const validateForm = async () => {
 };
 
 const addTeam = () => {
-  console.log(team.value);
   TeamServices.addTeam(team.value)
     .then((response) => {
-      console.log(response);
       if (response.status == 200) {
         showDialog.value = true;
       } else {
-        console.log(response);
         errorMsg.value = response.data.message;
       }
     })
@@ -39,20 +44,11 @@ const addTeam = () => {
 
 const errorMsg = ref("");
 const showDialog = ref(false);
-const titles = ref();
 const team = ref({
   name: "",
   isFlagship: false,
   titleId: null,
 });
-
-const getTitles = () => {
-  TitleServices.getTitles().then((response) => {
-    titles.value = response.data.map((title) => {
-      return { name: title.name, value: title.id };
-    });
-  });
-};
 
 const resetAdd = () => {
   showDialog.value = false;
@@ -62,10 +58,6 @@ const resetAdd = () => {
     titleID: null,
   };
 };
-
-onMounted(() => {
-  getTitles();
-});
 </script>
 
 <template>
@@ -73,7 +65,7 @@ onMounted(() => {
     <div class="w-75 mx-auto mt-4">
       <Select
         v-model="team.titleId"
-        :items="titles"
+        :items="props.titles"
         label="Title"
         :validators="{ required }"
       />

@@ -1,10 +1,25 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
+import TitleServices from "../../../services/titleServices.js";
 import ViewTeams from "./ViewTeams.vue";
 import AddTeam from "./AddTeam.vue";
 
 const currentTab = ref("1");
+const titles = ref([]);
+
+const getTitles = async () => {
+  console.log("Hello");
+  await TitleServices.getTitles(0, 0).then((response) => {
+    titles.value = response.data.map((title) => {
+      return { name: title.name, value: title.id };
+    });
+  });
+};
+
+onMounted(() => {
+  getTitles();
+});
 </script>
 
 <script>
@@ -28,11 +43,11 @@ export default {
       <v-divider />
       <v-window v-model="currentTab">
         <v-window-item value="1">
-          <ViewTeams />
+          <ViewTeams :titles="titles" />
         </v-window-item>
 
         <v-window-item value="2">
-          <AddTeam />
+          <AddTeam :titles="titles" />
         </v-window-item>
       </v-window>
     </v-card>

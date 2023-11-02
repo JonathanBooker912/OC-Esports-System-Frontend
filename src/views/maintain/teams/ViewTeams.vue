@@ -9,11 +9,21 @@ import { storeToRefs } from "pinia";
 import DataTable from "../../../components/DataTable.vue";
 import ConfirmAction from "../../../components/ConfirmAction.vue";
 import TextField from "../../../components/FormComponents/TextField.vue";
+import Select from "../../../components/FormComponents/SelectBox.vue";
 
 const store = useDataTableStore();
 const { itemsPerPage, page } = storeToRefs(store);
 
 const validator = new FormValidator();
+
+const props = defineProps({
+  titles: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
+});
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
@@ -112,10 +122,11 @@ const updateTeam = () => {
   const updatedTeam = {
     name: selectedTeam.value.name,
     isFlagship: selectedTeam.value.isFlagship,
+    titleId: selectedTeam.value.titleId,
   };
   TeamServices.updateTeam(selectedTeam.value.id, updatedTeam)
     .then(() => {
-      getTeams(5, 1);
+      getTeams(itemsPerPage.value, page.value);
     })
     .catch((error) => {
       // Handle the error, like showing an error message
@@ -125,11 +136,11 @@ const updateTeam = () => {
 };
 
 const reloadTable = () => {
-  getTeams(itemsPerPage.value, 1);
+  getTeams(itemsPerPage.value, page.value);
 };
 
 onMounted(() => {
-  getTeams(5, 1);
+  reloadTable();
 });
 </script>
 
@@ -163,6 +174,12 @@ onMounted(() => {
             <TextField
               v-model="selectedTeam.name"
               label="Team Name"
+              :validators="{ required }"
+            />
+            <Select
+              v-model="selectedTeam.titleId"
+              label="Title"
+              :items="props.titles"
               :validators="{ required }"
             />
             <div class="text-h5 pa-5">
