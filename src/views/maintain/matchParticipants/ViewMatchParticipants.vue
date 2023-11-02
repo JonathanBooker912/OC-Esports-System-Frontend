@@ -1,11 +1,9 @@
 <script setup>
-import MatchServices from "../../../services/matchServices.js";
-import TeamServices from "../../../services/teamServices.js";
+import MatchParticipantServices from "../../../services/matchParticipantServices.js";
 
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { required } from "@vuelidate/validators";
-import { useRouter } from "vue-router";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 import { useDataTableStore } from "../../../stores/dataTableStore.js";
 
@@ -17,10 +15,15 @@ import { storeToRefs } from "pinia";
 
 const router = useRouter();
 
+const props = defineProps({
+  matchId: {
+    type: Number,
+    default: -1,
+  },
+});
+
 const store = useDataTableStore();
 const { itemsPerPage, page } = storeToRefs(store);
-
-const router = useRouter();
 
 const validator = new FormValidator();
 
@@ -44,27 +47,12 @@ const showError = ref(false);
 const teams = ref([]);
 
 const actions = [
-  { label: "Edit", event: "edit-match" },
-  { label: "View MatchData", event: "view-matchData" },
-  { label: "View Players", event: "view-participants" },
+  { label: "View Data", event: "view-data" },
   { label: "Delete", event: "delete-match" },
 ];
 
 const handleActionEvent = (payload) => {
-  if (payload.event == "edit-match") viewMatch(payload.value);
-
-  if (payload.event == "view-matchData") {
-    router.push({
-      name: "maintainMatchData",
-    })
-  }
-  
-  if (payload.event == "view-participants") {
-    router.push({
-      name: "maintainMatchParticipants",
-      params: { matchId: payload.value },
-    });
-  }
+  if (payload.event == "view-data") viewData(payload.value);
 
   if (payload.event == "delete-match") {
     matchToDelete.value = payload.value;
@@ -76,10 +64,10 @@ const showConfirmDialog = () => {
   showConfirm.value = !showConfirm.value;
 };
 
-const getMatches = (itemsPerPage, page) => {
-  MatchServices.getAllMatches(itemsPerPage, page)
+const getParticipants = () => {
+  MatchParticipantServices.getAllForMatch(props.matchId, page.value, itemsPerPage.value)
     .then((response) => {
-      console.log(response.data.rows);
+      console.log(response.data)
       matches.value = response.data.rows;
       count.value = response.data.count;
     })
@@ -103,7 +91,7 @@ async function getMatchForId(matchId) {
 
 const search = (filter) => {
   if (filter == "" || filter == null) {
-    getMatches(itemsPerPage.value, page.value);
+    getParticipants(itemsPerPage.value, page.value);
   } else {
     MatchServices.search(filter, itemsPerPage.value, page.value)
       .then((response) => {
@@ -117,15 +105,19 @@ const search = (filter) => {
   }
 };
 
-const viewMatch = async (userId) => {
-  await getMatchForId(userId);
-  dialog.value = true;
+const viewData = async (participantId) => {
+  router.push({
+    name: "maintainPlayerData",
+    params: { 
+      matchId: props.matchId,
+      participantId: participantId },
+  });
 };
 
 const deleteMatch = () => {
   MatchServices.deleteMatch(matchToDelete.value)
     .then(() => {
-      getMatches(5, 1);
+      getParticipants(5, 1);
     })
     .catch((error) => {
       errorMsg.value = error.response.data.message;
@@ -142,7 +134,7 @@ const updateMatch = () => {
   MatchServices.updateMatch(selectedMatch.value.id, updatedMatch)
     .then(() => {
       dialog.value = false;
-      getMatches(itemsPerPage, 1);
+      getParticipants(itemsPerPage, 1);
     })
     .catch((error) => {
       errorMsg.value = error.message;
@@ -165,12 +157,11 @@ const getTeams = () => {
 };
 
 const reloadTable = (itemsPerPage) => {
-  getMatches(itemsPerPage, 1);
+  getParticipants(itemsPerPage, 1);
 };
 
 onMounted(() => {
-  getMatches(5, 1);
-  getTeams();
+  getParticipants(5, 1);
 });
 </script>
 
@@ -180,8 +171,7 @@ onMounted(() => {
       :data="matches"
       :count="count"
       :columns="[
-        { key: 'name', label: 'Name' },
-        { key: 'teamId', label: 'Team ID' },
+        { key: 'gamerTag', label: 'Gamer Tag' },
       ]"
       :actions="actions"
       @action-event="handleActionEvent"
