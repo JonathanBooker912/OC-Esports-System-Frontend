@@ -13,7 +13,14 @@ export default {
   deletePlayerData(id) {
     return apiClient.delete(`/playerData/${id}`);
   },
-  getAllForParticipant(participantId) {
-    return apiClient.get(`/playerData/participant/${participantId}`);
+  getAllForParticipant(participantId, page, pageSize) {
+    return apiClient.get(
+      `/playerData/participant/${participantId}?page=${page}&pageSize=${pageSize}`,
+    );
+  },
+  searchParticipantData(participantId, page, pageSize, filter) {
+    return apiClient.get(
+      `/playerData/participant/${participantId}?page=${page}&pageSize=${pageSize}&filter=${filter}`,
+    );
   },
 };

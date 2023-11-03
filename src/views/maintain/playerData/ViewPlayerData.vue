@@ -71,7 +71,11 @@ const showConfirmDialog = () => {
 };
 
 const getData = () => {
-  PlayerDataServices.getAllForParticipant(props.participantId)
+  PlayerDataServices.getAllForParticipant(
+    props.participantId,
+    page.value,
+    itemsPerPage.value,
+  )
     .then((response) => {
       matches.value = response.data.rows;
       count.value = response.data.count;
@@ -99,7 +103,12 @@ const search = (filter) => {
   if (filter == "" || filter == null) {
     getData(itemsPerPage.value, page.value);
   } else {
-    PlayerDataServices.search(filter, itemsPerPage.value, page.value)
+    PlayerDataServices.searchParticipantData(
+      props.participantId,
+      page.value,
+      itemsPerPage.value,
+      filter,
+    )
       .then((response) => {
         matches.value = response.data.rows;
         count.value = response.data.count;
