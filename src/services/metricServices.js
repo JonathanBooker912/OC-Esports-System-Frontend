@@ -21,6 +21,9 @@ export default {
   getAllMatchMetricsForTitle(titleId) {
     return apiClient.get(`/metrics/title/${titleId}/matchMetrics`);
   },
+  getAllPlayerMetricsForTitle(titleId) {
+    return apiClient.get(`/metrics/title/${titleId}/playerMetrics`);
+  },
   getMetricTypes() {
     return apiClient.get("/metrics/values/metricTypes");
   },
