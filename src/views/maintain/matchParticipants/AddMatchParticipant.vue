@@ -1,28 +1,37 @@
 <script setup>
-import TeamServices from "../../../services/teamServices.js";
-
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 
-import TextField from "../../../components/FormComponents/TextField.vue";
 import Select from "../../../components/FormComponents/SelectBox.vue";
 
-import MatchServices from "../../../services/matchServices.js";
+import MatchParticipantServices from "../../../services/matchParticipantServices.js";
+import AliasServices from "../../../services/aliasServices.js";
+
+const props = defineProps({
+  matchId: {
+    type: Number,
+    default: -1,
+  },
+  teamId: {
+    type: Number,
+    default: -1,
+  },
+});
 
 const validator = new FormValidator();
 const emit = defineEmits(["cancel"]);
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
-    addMatch();
+    addParticipant();
   } else {
     return;
   }
 };
 
-const addMatch = () => {
-  MatchServices.createMatch(match.value)
+const addParticipant = () => {
+  MatchParticipantServices.addParticipant(participant.value)
     .then((response) => {
       if (response.status == 200) {
         showDialog.value = true;
@@ -38,17 +47,17 @@ const addMatch = () => {
 
 const errorMsg = ref("");
 const showDialog = ref(false);
-const teams = ref([]);
-const match = ref({
-  name: "",
-  teamId: null,
+const players = ref([]);
+const participant = ref({
+  aliasId: null,
+  matchId: props.matchId,
 });
 
-const getTeams = () => {
-  TeamServices.getAllTeams()
+const getTeamMembers = () => {
+  AliasServices.getAllForTeam(props.teamId)
     .then((response) => {
-      teams.value = response.data.rows.map((team) => {
-        return { name: team.name, value: team.id };
+      players.value = response.data.map((player) => {
+        return { name: player.gamerTag, value: player.id };
       });
     })
     .catch((err) => {
@@ -59,8 +68,7 @@ const getTeams = () => {
 
 const resetAdd = () => {
   showDialog.value = false;
-  match.value.name = "";
-  match.value.teamId = null;
+  participant.value.aliasId = null;
 };
 
 const cancel = () => {
@@ -68,22 +76,17 @@ const cancel = () => {
 };
 
 onMounted(() => {
-  getTeams();
+  getTeamMembers();
 });
 </script>
 
 <template>
   <div>
     <div class="w-75 mx-auto mt-4">
-      <TextField
-        v-model="match.name"
-        label="Match Name"
-        :validators="{ required }"
-      />
       <Select
-        v-model="match.teamId"
-        :items="teams"
-        label="Team"
+        v-model="participant.aliasId"
+        :items="players"
+        label="Team Members"
         :validators="{ required }"
       />
     </div>
@@ -94,7 +97,7 @@ onMounted(() => {
     <v-dialog v-model="showDialog" width="auto">
       <v-card>
         <v-card-text>
-          {{ errorMsg ? errorMsg : "Successfully Added Match!" }}
+          {{ errorMsg ? errorMsg : "Successfully Added Participant!" }}
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" block @click="resetAdd">OK</v-btn>

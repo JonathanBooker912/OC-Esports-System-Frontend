@@ -8,6 +8,7 @@ import InfoRow from "../components/View/InfoRow.vue";
 /* API Services */
 import TitleServices from "../services/titleServices";
 import UserServices from "../services/userServices";
+import AliasServices from "../services/aliasServices";
 
 const userInfoLoaded = ref(false);
 const userInfo = ref({});
@@ -23,7 +24,7 @@ function getUser() {
     //getDataLists(); // get the list of titles and classifications
     userInfo.value.expectedGradDate = new Date(userInfo.value.expectedGradDate);
 
-    UserServices.getPrimaryAlias(userId).then((response) => {
+    AliasServices.getPrimaryAlias(userId).then((response) => {
       if (response.data.length > 0) {
         // check if there is a primary alias
         userInfo.value.gamerTag = response.data[0].gamerTag;
@@ -46,30 +47,33 @@ function getEmergencyContacts() {
 }
 
 function getAliases() {
-  UserServices.getAllAliases(Utils.getStore("user").userId).then((response) => {
-    for (let i = 0; i < response.data.length; i++) {
-      let currentAlias = response.data[i];
-      titles.value.forEach((title) => {
-        if ((title.id = currentAlias.titleId)) {
-          currentAlias.title = title.name;
-        }
-      });
+  AliasServices.getAllForUser(Utils.getStore("user").userId).then(
+    (response) => {
+      for (let i = 0; i < response.data.length; i++) {
+        let currentAlias = response.data[i];
+        titles.value.forEach((title) => {
+          if ((title.id = currentAlias.titleId)) {
+            currentAlias.title = title.name;
+          }
+        });
 
-      aliases.value.push(response.data[i]);
-    }
-  });
+        aliases.value.push(response.data[i]);
+      }
+    },
+  );
 }
 
-function getTitles() {
-  TitleServices.getTitles().then((response) => {
-    titles.value = response.data.map((title) => {
+async function getTitles() {
+  await TitleServices.getTitles().then((response) => {
+    console.log(response);
+    titles.value = response.data.rows.map((title) => {
       return { name: title.name, value: title.id };
     });
   });
 }
 
-onMounted(() => {
-  getTitles();
+onMounted(async () => {
+  await getTitles();
   getUser();
   getAliases();
   getEmergencyContacts();

@@ -12,9 +12,8 @@ import MaintainMatches from "./views/maintain/match/MaintainMatches.vue";
 import MaintainTitles from "./views/maintain/titles/MaintainTitles.vue";
 import MaintainTitleMetrics from "./views/maintain/metrics/MaintainTitleMetrics.vue";
 import MaintainMatchData from "./views/maintain/matchData/MaintainMatchData.vue";
-import MaintainMatchParticipants from "./views/maintain/matchParticipants/MaintainMatchParticipants.vue"
-import MaintainPlayerData from "./views/maintain/playerData/MaintainPlayerData.vue"
-
+import MaintainMatchParticipants from "./views/maintain/matchParticipants/MaintainMatchParticipants.vue";
+import MaintainPlayerData from "./views/maintain/playerData/MaintainPlayerData.vue";
 
 import AuthServices from "./services/authServices.js";
 
@@ -115,9 +114,9 @@ const router = createRouter({
       path: "/maintain/matches/:matchId/participants/:participantId",
       name: "maintainPlayerData",
       component: MaintainPlayerData,
-      props: (route) => ({ 
+      props: (route) => ({
         matchId: Number(route.params.matchId),
-        participantId: Number(route.params.participantId) 
+        participantId: Number(route.params.participantId),
       }),
     },
   ],

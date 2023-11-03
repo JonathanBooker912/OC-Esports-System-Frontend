@@ -3,7 +3,6 @@ import MatchServices from "../../../services/matchServices.js";
 import TeamServices from "../../../services/teamServices.js";
 
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import { required } from "@vuelidate/validators";
 import { useRouter } from "vue-router";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
@@ -14,8 +13,6 @@ import ConfirmAction from "../../../components/ConfirmAction.vue";
 import TextField from "../../../components/FormComponents/TextField.vue";
 import Select from "../../../components/FormComponents/SelectBox.vue";
 import { storeToRefs } from "pinia";
-
-const router = useRouter();
 
 const store = useDataTableStore();
 const { itemsPerPage, page } = storeToRefs(store);
@@ -56,9 +53,10 @@ const handleActionEvent = (payload) => {
   if (payload.event == "view-matchData") {
     router.push({
       name: "maintainMatchData",
-    })
+      params: { matchId: payload.value },
+    });
   }
-  
+
   if (payload.event == "view-participants") {
     router.push({
       name: "maintainMatchParticipants",

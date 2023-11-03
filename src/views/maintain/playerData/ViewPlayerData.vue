@@ -35,7 +35,7 @@ const validator = new FormValidator();
 
 const validateForm = async () => {
   if (await validator.isFormValid()) {
-    updateMatch();
+    updateData();
   } else {
     return;
   }
@@ -86,7 +86,7 @@ const getData = () => {
 async function getDataForId(dataId) {
   await PlayerDataServices.getPlayerDataById(dataId)
     .then((response) => {
-      console.log(response)
+      console.log(response);
       selectedData.value = response.data;
     })
     .catch((err) => {
@@ -97,9 +97,9 @@ async function getDataForId(dataId) {
 
 const search = (filter) => {
   if (filter == "" || filter == null) {
-    getParticipants(itemsPerPage.value, page.value);
+    getData(itemsPerPage.value, page.value);
   } else {
-    MatchServices.search(filter, itemsPerPage.value, page.value)
+    PlayerDataServices.search(filter, itemsPerPage.value, page.value)
       .then((response) => {
         matches.value = response.data.rows;
         count.value = response.data.count;
@@ -122,19 +122,20 @@ const deleteData = () => {
       getData(5, 1);
     })
     .catch((error) => {
-      console.log(error)
+      console.log(error);
       errorMsg.value = error.response.data.message;
       showError.value = true;
     });
   showConfirmDialog();
 };
 
-const updateMatch = () => {
+const updateData = () => {
   const updatedMatch = {
-    name: selectedData.value.name,
-    teamId: selectedData.value.teamId,
+    value: selectedData.value.value,
+    participantId: props.participantId,
+    metricId: selectedData.value.metricId,
   };
-  MatchServices.updateMatch(selectedData.value.id, updatedMatch)
+  PlayerDataServices.updatePlayerData(selectedData.value.id, updatedMatch)
     .then(() => {
       dialog.value = false;
       getData(itemsPerPage, 1);
@@ -147,14 +148,14 @@ const updateMatch = () => {
 };
 
 const getMetrics = () => {
-  MetricServices.getMetricsForTitle(props.titleId, 1000, 1)
+  MetricServices.getAllPlayerMetricsForTitle(props.titleId)
     .then((response) => {
-      metrics.value = response.data.rows.map((metric) => {
+      metrics.value = response.data.map((metric) => {
         return { name: metric.name, value: metric.id };
       });
     })
     .catch((err) => {
-      errorMsg.value = err.message;
+      errorMsg.value = err.response.data.message;
       showError.value = true;
     });
 };
@@ -162,7 +163,7 @@ const getMetrics = () => {
 //watch(props.titleId, getMetrics())
 
 const reloadTable = (itemsPerPage) => {
-  getParticipants(itemsPerPage, 1);
+  getData(itemsPerPage, 1);
 };
 
 onMounted(() => {
@@ -198,14 +199,12 @@ onMounted(() => {
             <v-btn icon="mdi-arrow-left" @click="dialog = false"></v-btn>
           </v-toolbar>
           <v-card-text>
-            <div class="text-h5 pa-5">
-              <Select
-                v-model="selectedData.metricId"
-                label="Team"
-                :items="metrics"
-                :validators="{ required }"
-              />
-            </div>
+            <Select
+              v-model="selectedData.metricId"
+              label="Metric"
+              :items="metrics"
+              :validators="{ required }"
+            />
             <TextField
               v-model="selectedData.value"
               label="Value"

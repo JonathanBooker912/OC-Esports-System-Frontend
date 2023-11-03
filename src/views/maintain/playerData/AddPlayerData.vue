@@ -1,6 +1,4 @@
 <script setup>
-import TeamServices from "../../../services/teamServices.js";
-
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
@@ -9,8 +7,7 @@ import TextField from "../../../components/FormComponents/TextField.vue";
 import Select from "../../../components/FormComponents/SelectBox.vue";
 
 import MetricServices from "../../../services/metricServices.js";
-import PlayerDataServices from "../../../services/playerDataServices.js"
-
+import PlayerDataServices from "../../../services/playerDataServices.js";
 
 const props = defineProps({
   titleId: {
@@ -59,9 +56,9 @@ const data = ref({
 });
 
 const getMetrics = () => {
-  MetricServices.getMetricsForTitle(props.titleId)
+  MetricServices.getAllPlayerMetricsForTitle(props.titleId)
     .then((response) => {
-      metrics.value = response.data.rows.map((metric) => {
+      metrics.value = response.data.map((metric) => {
         return { name: metric.name, value: metric.id };
       });
     })
@@ -73,8 +70,8 @@ const getMetrics = () => {
 
 const resetAdd = () => {
   showDialog.value = false;
-  match.value.name = "";
-  match.value.teamId = null;
+  data.value.name = "";
+  data.value.teamId = null;
 };
 
 const cancel = () => {
@@ -108,7 +105,7 @@ onMounted(() => {
     <v-dialog v-model="showDialog" width="auto">
       <v-card>
         <v-card-text>
-          {{ errorMsg ? errorMsg : "Successfully Added Match!" }}
+          {{ errorMsg ? errorMsg : "Successfully Added Player Data!" }}
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" block @click="resetAdd">OK</v-btn>

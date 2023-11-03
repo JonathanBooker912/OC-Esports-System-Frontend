@@ -41,18 +41,4 @@ export default {
   getEmergencyContacts(userId) {
     return apiClient.get(`/user/${userId}/emergencyContacts/`);
   },
-
-  /*-- Aliases --*/
-  getPrimaryAlias(userId) {
-    return apiClient.get(`user/${userId}/alias?type=primary`);
-  },
-  getAllAliases(userId) {
-    return apiClient.get(`user/${userId}/alias`);
-  },
-  addAlias(userId, alias) {
-    return apiClient.post(`user/${userId}/alias`, alias);
-  },
-  updateAlias(userId, aliasId, alias) {
-    return apiClient.put(`user/${userId}/alias/${aliasId}`, alias);
-  },
 };

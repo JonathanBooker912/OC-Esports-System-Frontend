@@ -1,5 +1,6 @@
 <script setup>
 import MatchParticipantServices from "../../../services/matchParticipantServices.js";
+import MatchServices from "../../../services/matchServices.js";
 
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
@@ -40,7 +41,7 @@ const count = ref(5);
 const dialog = ref(false);
 const showConfirm = ref(false);
 const selectedMatch = ref({});
-const matchToDelete = ref(null);
+const participantToDelete = ref(null);
 const errorMsg = ref("");
 const showError = ref(false);
 
@@ -48,14 +49,14 @@ const teams = ref([]);
 
 const actions = [
   { label: "View Data", event: "view-data" },
-  { label: "Delete", event: "delete-match" },
+  { label: "Delete", event: "delete-participant" },
 ];
 
 const handleActionEvent = (payload) => {
   if (payload.event == "view-data") viewData(payload.value);
 
-  if (payload.event == "delete-match") {
-    matchToDelete.value = payload.value;
+  if (payload.event == "delete-participant") {
+    participantToDelete.value = payload.value;
     showConfirmDialog();
   }
 };
@@ -65,9 +66,13 @@ const showConfirmDialog = () => {
 };
 
 const getParticipants = () => {
-  MatchParticipantServices.getAllForMatch(props.matchId, page.value, itemsPerPage.value)
+  MatchParticipantServices.search(
+    props.matchId,
+    page.value,
+    itemsPerPage.value,
+    "",
+  )
     .then((response) => {
-      console.log(response.data)
       matches.value = response.data.rows;
       count.value = response.data.count;
     })
@@ -78,22 +83,16 @@ const getParticipants = () => {
     });
 };
 
-async function getMatchForId(matchId) {
-  await MatchServices.getMatch(matchId)
-    .then((response) => {
-      selectedMatch.value = response.data;
-    })
-    .catch((err) => {
-      errorMsg.value = err.message;
-      showError.value = true;
-    });
-}
-
 const search = (filter) => {
   if (filter == "" || filter == null) {
     getParticipants(itemsPerPage.value, page.value);
   } else {
-    MatchServices.search(filter, itemsPerPage.value, page.value)
+    MatchParticipantServices.search(
+      props.matchId,
+      page.value,
+      itemsPerPage.value,
+      filter,
+    )
       .then((response) => {
         matches.value = response.data.rows;
         count.value = response.data.count;
@@ -108,14 +107,15 @@ const search = (filter) => {
 const viewData = async (participantId) => {
   router.push({
     name: "maintainPlayerData",
-    params: { 
+    params: {
       matchId: props.matchId,
-      participantId: participantId },
+      participantId: participantId,
+    },
   });
 };
 
-const deleteMatch = () => {
-  MatchServices.deleteMatch(matchToDelete.value)
+const deleteParticipant = () => {
+  MatchParticipantServices.deleteMatchParticipant(participantToDelete.value)
     .then(() => {
       getParticipants(5, 1);
     })
@@ -143,19 +143,6 @@ const updateMatch = () => {
     });
 };
 
-const getTeams = () => {
-  TeamServices.getAllTeams()
-    .then((response) => {
-      teams.value = response.data.rows.map((team) => {
-        return { name: team.name, value: team.id };
-      });
-    })
-    .catch((err) => {
-      errorMsg.value = err.message;
-      showError.value = true;
-    });
-};
-
 const reloadTable = (itemsPerPage) => {
   getParticipants(itemsPerPage, 1);
 };
@@ -170,9 +157,7 @@ onMounted(() => {
     <DataTable
       :data="matches"
       :count="count"
-      :columns="[
-        { key: 'gamerTag', label: 'Gamer Tag' },
-      ]"
+      :columns="[{ key: 'gamerTag', label: 'Gamer Tag' }]"
       :actions="actions"
       @action-event="handleActionEvent"
       @search="search"
@@ -181,7 +166,7 @@ onMounted(() => {
     <ConfirmAction
       :show="showConfirm"
       action="Delete"
-      @action="deleteMatch"
+      @action="deleteParticipant"
       @cancel="showConfirmDialog"
     />
     <div class="text-center">

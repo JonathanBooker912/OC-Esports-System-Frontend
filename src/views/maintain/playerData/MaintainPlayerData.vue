@@ -6,6 +6,7 @@ import AddPlayerData from "./AddPlayerData.vue";
 
 import MatchServices from "../../../services/matchServices.js";
 import TeamServices from "../../../services/teamServices.js";
+import MatchParticipantServices from "../../../services/matchParticipantServices.js";
 
 const props = defineProps({
   matchId: {
@@ -20,12 +21,15 @@ const props = defineProps({
 
 const currentTab = ref("1");
 const titleId = ref(-1);
+const participantName = ref("");
+const matchName = ref("");
 
 const getTitleId = async () => {
   const match = await MatchServices.getMatch(props.matchId);
   const team = await TeamServices.getTeam(match.data.teamId);
+  matchName.value = match.data.name;
   titleId.value = team.data.titleId;
-}
+};
 
 const switchCurrentTab = () => {
   if (currentTab.value == "1") {
@@ -35,9 +39,19 @@ const switchCurrentTab = () => {
   }
 };
 
-onMounted(()=> {
+const getParticipant = () => {
+  MatchParticipantServices.getMatchParticipantById(props.participantId).then(
+    (response) => {
+      console.log(participantName.value);
+      participantName.value = response.data.alias.gamerTag;
+    },
+  );
+};
+
+onMounted(() => {
   getTitleId();
-})
+  getParticipant();
+});
 </script>
 
 <script>
@@ -52,7 +66,12 @@ export default {
 </script>
 
 <template>
-  <v-col :cols="cols" class="mx-auto" v-if="titleId != -1">
+  <v-col
+    v-if="titleId != -1 && matchName != '' && participantName != ''"
+    :cols="cols"
+    class="mx-auto"
+  >
+    <h1 class="mb-2">{{ matchName }} > {{ participantName }}'s Data</h1>
     <v-card>
       <v-tabs v-model="currentTab" color="primary" dark slider-color="primary">
         <v-tab value="1">View Player Data</v-tab>
@@ -60,9 +79,19 @@ export default {
       </v-tabs>
       <v-divider />
       <v-window v-model="currentTab">
-        <v-window-item value="1"> <ViewPlayerData :matchId="props.matchId" :titleId="titleId" :participantId="props.participantId"/> </v-window-item>
+        <v-window-item value="1">
+          <ViewPlayerData
+            :match-id="props.matchId"
+            :title-id="titleId"
+            :participant-id="props.participantId"
+          />
+        </v-window-item>
         <v-window-item value="2">
-          <AddPlayerData :titleId="titleId" :participantId="props.participantId" @cancel="switchCurrentTab" />
+          <AddPlayerData
+            :title-id="titleId"
+            :participant-id="props.participantId"
+            @cancel="switchCurrentTab"
+          />
         </v-window-item>
       </v-window>
     </v-card>
