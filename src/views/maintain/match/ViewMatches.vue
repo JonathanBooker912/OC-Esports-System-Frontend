@@ -4,6 +4,7 @@ import TeamServices from "../../../services/teamServices.js";
 
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
+import dateValidator from "../../../utils/dateOnlyValidator.js"
 import { useRouter } from "vue-router";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 import { useDataTableStore } from "../../../stores/dataTableStore.js";
@@ -78,7 +79,7 @@ const getMatches = (itemsPerPage, page) => {
   MatchServices.getAllMatches(itemsPerPage, page)
     .then((response) => {
       console.log(response.data.rows);
-      matches.value = response.data.rows;
+      matches.value = formatMatchResults(response.data.rows);
       count.value = response.data.count;
     })
     .catch((err) => {
@@ -105,7 +106,7 @@ const search = (filter) => {
   } else {
     MatchServices.search(filter, itemsPerPage.value, page.value)
       .then((response) => {
-        matches.value = response.data.rows;
+        matches.value = formatMatchResults(response.data.rows);
         count.value = response.data.count;
       })
       .catch((err) => {
@@ -136,6 +137,8 @@ const updateMatch = () => {
   const updatedMatch = {
     name: selectedMatch.value.name,
     teamId: selectedMatch.value.teamId,
+    matchDate: selectedMatch.value.matchDate,
+    matchIsWin: selectedMatch.value.matchIsWin
   };
   MatchServices.updateMatch(selectedMatch.value.id, updatedMatch)
     .then(() => {
@@ -166,6 +169,12 @@ const reloadTable = (itemsPerPage) => {
   getMatches(itemsPerPage, 1);
 };
 
+const formatMatchResults = (matchResults) => {
+  return matchResults.map((match) => {
+    return {...match, result: match.matchIsWin ? "Win" : "Loss"}
+  });
+}
+
 onMounted(() => {
   getMatches(5, 1);
   getTeams();
@@ -179,7 +188,8 @@ onMounted(() => {
       :count="count"
       :columns="[
         { key: 'name', label: 'Name' },
-        { key: 'teamId', label: 'Team ID' },
+        { key: 'matchDate', label: 'Date' },
+        { key: 'result', label: 'Result' },
       ]"
       :actions="actions"
       @action-event="handleActionEvent"
@@ -204,14 +214,18 @@ onMounted(() => {
               label="Match Name"
               :validators="{ required }"
             />
-            <div class="text-h5 pa-5">
-              <Select
-                v-model="selectedMatch.teamId"
-                label="Team"
-                :items="teams"
-                :validators="{ required }"
-              />
-            </div>
+            <Select
+              v-model="selectedMatch.teamId"
+              label="Team"
+              :items="teams"
+              :validators="{ required }"
+            />
+            <TextField
+              v-model="selectedMatch.matchDate"
+              label="Match Date"
+              :validators="{ required, dateValidator }"
+            />
+            <v-checkbox v-model="selectedMatch.matchIsWin" label="Match Win" />
           </v-card-text>
           <div class="text-center">
             <v-btn color="primary" class="ma-4" @click="validateForm"

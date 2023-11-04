@@ -9,6 +9,7 @@ import TextField from "../../../components/FormComponents/TextField.vue";
 import Select from "../../../components/FormComponents/SelectBox.vue";
 
 import MatchServices from "../../../services/matchServices.js";
+import dateValidator from "../../../utils/dateOnlyValidator.js";
 
 const validator = new FormValidator();
 const emit = defineEmits(["cancel"]);
@@ -42,6 +43,8 @@ const teams = ref([]);
 const match = ref({
   name: "",
   teamId: null,
+  matchDate: "",
+  matchIsWin: false,
 });
 
 const getTeams = () => {
@@ -86,6 +89,12 @@ onMounted(() => {
         label="Team"
         :validators="{ required }"
       />
+      <TextField
+        v-model="match.matchDate"
+        label="Match Date"
+        :validators="{ required, dateValidator }"
+      />
+      <v-checkbox v-model="match.matchIsWin" label="Match Win" />
     </div>
     <div class="text-center">
       <v-btn color="primary" class="ma-4" @click="validateForm">Save</v-btn>
