@@ -4,7 +4,7 @@ import TeamServices from "../../../services/teamServices.js";
 
 import { ref, onMounted } from "vue";
 import { required } from "@vuelidate/validators";
-import dateValidator from "../../../utils/dateOnlyValidator.js"
+import dateValidator from "../../../utils/dateOnlyValidator.js";
 import { useRouter } from "vue-router";
 import FormValidator from "../../../components/FormComponents/support/FormValidator";
 import { useDataTableStore } from "../../../stores/dataTableStore.js";
@@ -138,7 +138,7 @@ const updateMatch = () => {
     name: selectedMatch.value.name,
     teamId: selectedMatch.value.teamId,
     matchDate: selectedMatch.value.matchDate,
-    matchIsWin: selectedMatch.value.matchIsWin
+    matchIsWin: selectedMatch.value.matchIsWin,
   };
   MatchServices.updateMatch(selectedMatch.value.id, updatedMatch)
     .then(() => {
@@ -171,9 +171,9 @@ const reloadTable = (itemsPerPage) => {
 
 const formatMatchResults = (matchResults) => {
   return matchResults.map((match) => {
-    return {...match, result: match.matchIsWin ? "Win" : "Loss"}
+    return { ...match, result: match.matchIsWin ? "Win" : "Loss" };
   });
-}
+};
 
 onMounted(() => {
   getMatches(5, 1);
