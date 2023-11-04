@@ -1,0 +1,71 @@
+<script setup>
+import { onMounted, ref } from "vue"
+import { Line } from "vue-chartjs"
+import { Chart as ChartJS, Title, Tooltip, Legend, PointElement, LineElement, CategoryScale, LinearScale } from 'chart.js'
+
+import dataPointParser from "../utils/metricParser.js"
+
+const data = ref([])
+const dataLoaded = ref(false);
+
+const props = defineProps({
+  dataPoints: {
+    type: Array,
+    default: null,
+  },
+});
+
+const chartData = {
+  labels: [],
+  datasets: [
+    {
+        label: "Accuracy",
+        data: [],
+        borderColor: "#80162B",
+        backgroundColor: "#80162B",
+        tension: 0.2
+    }
+  ]
+}
+
+const chartOptions = {
+  responsive: true
+}
+
+ChartJS.register(Title, Tooltip, Legend, PointElement, LineElement, CategoryScale, LinearScale)
+
+const processData = () => {
+    props.dataPoints.forEach((dataPoint) =>{
+        const parsedData = dataPointParser(dataPoint, "Float");
+        chartData.labels.push(parsedData.id);
+        chartData.datasets[0].data.push(parsedData.value);
+    })
+}
+
+const sortData = () => {
+    props.dataPoints.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    // Compare the dates and return the comparison result
+    return dateA - dateB;
+  })
+}
+
+onMounted(() => {
+    sortData()
+    processData()
+    dataLoaded.value = true;
+})
+
+</script>
+
+<template>
+    <v-card v-if="dataLoaded" class="w-50">
+        <v-card-title>Accuracy</v-card-title>
+      <Line 
+        :options="chartOptions"
+        :data="chartData"
+      />
+    </v-card>
+</template>
