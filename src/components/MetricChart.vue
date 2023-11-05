@@ -13,13 +13,17 @@ const props = defineProps({
     type: Array,
     default: null,
   },
+  metricName: {
+    type: String,
+    default: ""
+  }
 });
 
 const chartData = {
   labels: [],
   datasets: [
     {
-        label: "Accuracy",
+        label: props.metricName,
         data: [],
         borderColor: "#80162B",
         backgroundColor: "#80162B",
@@ -61,10 +65,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-card v-if="dataLoaded" class="w-50">
-        <v-card-title>Accuracy</v-card-title>
+    <v-card v-if="dataLoaded" class="w-50 ma-2">
+        <v-card-title>{{props.metricName}}</v-card-title>
       <Line 
         :options="chartOptions"
+        class="ma-3"
         :data="chartData"
       />
     </v-card>

@@ -163,6 +163,6 @@ const averageAccuracy = [
         <v-btn class="ma-3"> View All </v-btn>
       </v-action> -->
     </v-card>
-  <MetricChart :dataPoints="averageAccuracy"/>
+  <MetricChart :dataPoints="averageAccuracy" metricName="Accuracy"/>
   </v-container>
 </template>
