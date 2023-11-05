@@ -6,16 +6,15 @@
 //  }
 
 const parseDataPoint = (metric, dataType) => {
-    const parsedData = {id: metric.date}
-    if(dataType == "Integer"){
-        const value = parseInt(metric.value)
-        parsedData.value = value
-    }
-    else if(dataType == "Float"){
-        const value = parseFloat(metric.value)
-        parsedData.value = value
-    }
-    return parsedData;
-}
+  const parsedData = { id: metric.date };
+  if (dataType == "Integer") {
+    const value = parseInt(metric.value);
+    parsedData.value = value;
+  } else if (dataType == "Float") {
+    const value = parseFloat(metric.value);
+    parsedData.value = value;
+  }
+  return parsedData;
+};
 
 export default parseDataPoint;

@@ -1,6 +1,5 @@
 <script setup>
-import { onMounted } from "vue"
-import MetricChart from "../components/MetricChart.vue"
+import MetricChart from "../components/MetricChart.vue";
 
 const averageAccuracy = [
   {
@@ -8,143 +7,142 @@ const averageAccuracy = [
     value: "97.2",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-03-15"
+    date: "2023-03-15",
   },
   {
     id: 2,
     value: "88.6",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-04-21"
+    date: "2023-04-21",
   },
   {
     id: 3,
     value: "81.4",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-02-10"
+    date: "2023-02-10",
   },
   {
     id: 4,
     value: "76.9",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-04-05"
+    date: "2023-04-05",
   },
   {
     id: 5,
     value: "92.3",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-05-12"
+    date: "2023-05-12",
   },
   {
     id: 6,
     value: "75.6",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-03-29"
+    date: "2023-03-29",
   },
   {
     id: 7,
     value: "84.7",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-02-18"
+    date: "2023-02-18",
   },
   {
     id: 8,
     value: "79.1",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-05-03"
+    date: "2023-05-03",
   },
   {
     id: 9,
     value: "77.5",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-01-27"
+    date: "2023-01-27",
   },
   {
     id: 10,
     value: "89.8",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-04-14"
+    date: "2023-04-14",
   },
   {
     id: 11,
     value: "95.0",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-03-05"
+    date: "2023-03-05",
   },
   {
     id: 12,
     value: "76.4",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-05-09"
+    date: "2023-05-09",
   },
   {
     id: 13,
     value: "80.2",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-02-15"
+    date: "2023-02-15",
   },
   {
     id: 14,
     value: "88.5",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-04-30"
+    date: "2023-04-30",
   },
   {
     id: 15,
     value: "79.7",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-03-08"
+    date: "2023-03-08",
   },
   {
     id: 16,
     value: "85.3",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-02-27"
+    date: "2023-02-27",
   },
   {
     id: 17,
     value: "76.8",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-05-18"
+    date: "2023-05-18",
   },
   {
     id: 18,
     value: "75.1",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-01-13"
+    date: "2023-01-13",
   },
   {
     id: 19,
     value: "87.6",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-04-02"
+    date: "2023-04-02",
   },
   {
     id: 20,
     value: "93.4",
     metricId: 11,
     metricName: "Avg Accuracy",
-    date: "2023-03-20"
-  }
+    date: "2023-03-20",
+  },
 ];
-
 </script>
 
 <template>
@@ -163,6 +161,6 @@ const averageAccuracy = [
         <v-btn class="ma-3"> View All </v-btn>
       </v-action> -->
     </v-card>
-  <MetricChart :dataPoints="averageAccuracy" metricName="Accuracy"/>
+    <MetricChart :data-points="averageAccuracy" metric-name="Accuracy" />
   </v-container>
 </template>
