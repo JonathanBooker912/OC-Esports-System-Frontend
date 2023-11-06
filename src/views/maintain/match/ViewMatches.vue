@@ -171,7 +171,7 @@ const reloadTable = (itemsPerPage) => {
 
 const formatMatchResults = (matchResults) => {
   return matchResults.map((match) => {
-    return { ...match, result: match.matchIsWin ? "Win" : "Loss" };
+    return { ...match, matchDate: match.matchDate , result: match.matchIsWin ? "Win" : "Loss" };
   });
 };
 
