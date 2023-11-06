@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -33,7 +33,7 @@ const props = defineProps({
   errorMsg: {
     type: String,
     default: "",
-  }
+  },
 });
 
 const chartData = {
@@ -52,10 +52,10 @@ const chartData = {
 const chartOptions = {
   responsive: true,
   plugins: {
-      legend: {
-         display: false
-      }
-  }
+    legend: {
+      display: false,
+    },
+  },
 };
 
 ChartJS.register(
@@ -79,38 +79,44 @@ const sortData = () => {
 };
 
 watch(props, () => {
-  if(!dataProcessed.value && props.errorMsg == ""){
+  if (!dataProcessed.value && props.errorMsg == "") {
     data.value = props.dataPoints;
     sortData();
     data.value.forEach((dataPoint) => {
       chartData.datasets[0].data.push(dataPoint.value);
       chartData.labels.push(dataPoint.matchDate);
-    })
-    if(data.value.length < 1){
-      error.value = "No Data to Display"
-    }
-    else{
+    });
+    if (data.value.length < 1) {
+      error.value = "No Data to Display";
+    } else {
       dataProcessed.value = true;
       showOverlay.value = false;
     }
-  }
-  else if(props.errorMsg){
+  } else if (props.errorMsg) {
     error.value = props.errorMsg;
   }
-})
-
+});
 </script>
 
 <template>
   <v-card class="ma-2">
-    <v-overlay v-model="showOverlay" contained class="align-center justify-center">
-      <h3 v-if="error">{{error}}</h3>
-      <v-progress-circular color="secondary" size="50" v-else indeterminate/>
+    <v-overlay
+      v-model="showOverlay"
+      contained
+      class="align-center justify-center"
+    >
+      <h3 v-if="error">{{ error }}</h3>
+      <v-progress-circular v-else color="secondary" size="50" indeterminate />
     </v-overlay>
 
     <v-card-title>{{ props.metricName }}</v-card-title>
 
-    <Line v-if="dataProcessed" :options="chartOptions" class="ma-3" :data="chartData" />
-    <Line v-else :options="chartOptions" class="ma-3" :data="chartData"/>
+    <Line
+      v-if="dataProcessed"
+      :options="chartOptions"
+      class="ma-3"
+      :data="chartData"
+    />
+    <Line v-else :options="chartOptions" class="ma-3" :data="chartData" />
   </v-card>
 </template>
