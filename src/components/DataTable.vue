@@ -55,15 +55,14 @@ function reload() {
   emit("reload");
 }
 
-function filterActions(){
+function filterActions() {
   props.actions.forEach((action) => {
-    if (action.label.includes("Edit") || action.label.includes("Delete")){
+    if (action.label.includes("Edit") || action.label.includes("Delete")) {
       standard_actions.value.push(action);
-    }
-    else{
+    } else {
       alternate_actions.value.push(action);
     }
-  })
+  });
 }
 
 onMounted(() => {
@@ -108,13 +107,10 @@ onMounted(() => {
             <td v-for="column in columns" :key="column.key">
               {{ item[column.key] }}
             </td>
-            <td class="text-center" v-if="alternate_actions.length > 1">
+            <td v-if="alternate_actions.length > 1" class="text-center">
               <v-menu class="mx-2">
-                <template v-slot:activator="{ props }">
-                  <v-btn
-                    :color="'secondary'"
-                    v-bind="props"
-                  >
+                <template #activator="{ props }">
+                  <v-btn :color="'secondary'" v-bind="props">
                     Other Actions
                   </v-btn>
                 </template>
@@ -123,12 +119,14 @@ onMounted(() => {
                     v-for="(action, index) in alternate_actions"
                     :key="index"
                     :value="index"
-                    @click="$emit('action-event', {
-                    event: action.event,
-                    value: item.id,
-                      })"
+                    @click="
+                      $emit('action-event', {
+                        event: action.event,
+                        value: item.id,
+                      })
+                    "
                   >
-                  {{ action.label }}
+                    {{ action.label }}
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -149,7 +147,7 @@ onMounted(() => {
                 {{ action.label }}
               </v-btn>
             </td>
-            <td class="text-center" v-else>
+            <td v-else class="text-center">
               <v-btn
                 v-for="action in props.actions"
                 :key="action.label"
