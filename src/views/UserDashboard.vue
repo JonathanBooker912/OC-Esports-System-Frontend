@@ -1,16 +1,15 @@
 <script setup>
-import PlayerMetricChart from "../components/Charts/PlayerMetricChart.vue";
+import PlayerMetricChartList from "../components/PlayerMetricChartList.vue";
 </script>
 
 <template>
   <v-container>
-    <v-toolbar>
-      <v-toolbar-title>Dashboard (WIP)</v-toolbar-title>
-    </v-toolbar>
-    <v-col class="w-50">
-      <PlayerMetricChart :alias-id="1" :metric-id="11" />
-      <PlayerMetricChart :alias-id="1" :metric-id="18" />
-      <PlayerMetricChart :alias-id="1" :metric-id="19" />
-    </v-col>
+    <h1>Player Statistics</h1>
+    <v-row>
+      <v-col cols="4"> </v-col>
+      <v-col class="w-75 float-right">
+        <PlayerMetricChartList :alias-id="1" :title-id="1" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
