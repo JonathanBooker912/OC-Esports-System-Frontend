@@ -99,7 +99,7 @@ watch(props, () => {
 </script>
 
 <template>
-  <v-card class="ma-2">
+  <v-card class="elevation-0">
     <v-overlay
       v-model="showOverlay"
       contained
