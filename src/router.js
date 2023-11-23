@@ -14,6 +14,7 @@ import MaintainTitleMetrics from "./views/maintain/metrics/MaintainTitleMetrics.
 import MaintainMatchData from "./views/maintain/matchData/MaintainMatchData.vue";
 import MaintainMatchParticipants from "./views/maintain/matchParticipants/MaintainMatchParticipants.vue";
 import MaintainPlayerData from "./views/maintain/playerData/MaintainPlayerData.vue";
+import ConnectionSettings from "./views/maintain/apiConnection/ConnectionSettings.vue"
 
 import AuthServices from "./services/authServices.js";
 
@@ -118,6 +119,12 @@ const router = createRouter({
         matchId: Number(route.params.matchId),
         participantId: Number(route.params.participantId),
       }),
+    },
+    {
+      path: "/maintain/api/connections",
+      name: "maintainAPIConnections",
+      component: ConnectionSettings,
+      props: true,
     },
   ],
 });
