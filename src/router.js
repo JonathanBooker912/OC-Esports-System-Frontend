@@ -14,6 +14,7 @@ import MaintainTitleMetrics from "./views/maintain/metrics/MaintainTitleMetrics.
 import MaintainMatchData from "./views/maintain/matchData/MaintainMatchData.vue";
 import MaintainMatchParticipants from "./views/maintain/matchParticipants/MaintainMatchParticipants.vue";
 import MaintainPlayerData from "./views/maintain/playerData/MaintainPlayerData.vue";
+import SignForms from "./views/SignForms.vue";
 
 import AuthServices from "./services/authServices.js";
 
@@ -118,6 +119,12 @@ const router = createRouter({
         matchId: Number(route.params.matchId),
         participantId: Number(route.params.participantId),
       }),
+    },
+    {
+      path: "/signForms",
+      name: "signForms",
+      component: SignForms,
+      props: true,
     },
   ],
 });
