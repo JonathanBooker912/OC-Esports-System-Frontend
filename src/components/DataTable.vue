@@ -109,6 +109,7 @@ onMounted(() => {
             </td>
             <td v-if="alternate_actions.length > 1" class="text-center">
               <v-menu class="mx-2">
+                <!-- eslint-disable-next-line -->
                 <template #activator="{ props }">
                   <v-btn :color="'secondary'" v-bind="props">
                     Other Actions
