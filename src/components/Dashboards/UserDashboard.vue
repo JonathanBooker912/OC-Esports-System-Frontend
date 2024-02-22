@@ -1,5 +1,6 @@
 <script setup>
-import PlayerMetricChartList from "../PlayerMetricChartList.vue";
+//import PlayerMetricChartList from "../PlayerMetricChartList.vue";
+import Schedule from "../components/Schedule.vue"
 </script>
 
 <template>
@@ -7,9 +8,10 @@ import PlayerMetricChartList from "../PlayerMetricChartList.vue";
     <h1>Player Statistics</h1>
     <v-row>
       <v-col cols="4"> </v-col>
-      <v-col class="w-75 float-right">
-        <PlayerMetricChartList :alias-id="1" :title-id="1" />
-      </v-col>
+      <v-row class="w-25 float-right" no-gutters>
+        <!-- <PlayerMetricChartList :alias-id="1" :title-id="1" /> -->
+        <Schedule />
+      </v-row>
     </v-row>
   </v-container>
 </template>
