@@ -9,13 +9,20 @@ import Utils from "../config/utils";
 
 const user = Utils.getStore("user");
 
-// const props = defineProps(["action", "show"]);
 const props = defineProps({
   show: Boolean,
   formVersionId: {
     type: Number,
     required: true,
   },
+  requireUserAcknowledgement: {
+    type: Boolean,
+    default: true
+  },
+  defaultFont: {
+    type: String,
+    default: null
+  }
 });
 const emit = defineEmits(["form-signed", "cancel"]);
 
@@ -36,22 +43,20 @@ const cancel = () => {
 };
 
 const signForm = () => {
-  const data = {
-    dateSigned: Date.now(),
-    userId: user.userId,
-    formVersionId: props.formVersionId,
-    fontSelection: fontSelection.value,
-  };
-  FormSignatureServices.createFormSignature(data);
-  // .then((response) => {
-  // })
-
-  signatureAcknowledge.value = false;
-
-  emit("form-signed");
+  if(props.requireUserAcknowledgement) {
+    signatureAcknowledge.value = false;
+  }
+  emit("form-signed", fontSelection.value);
 };
 
-onMounted(() => {});
+onMounted(() => {
+  if(props.requireUserAcknowledgement == false){
+    signatureAcknowledge.value = true
+  }
+  if(props.defaultFont != null) {
+    fontSelection.value = props.defaultFont
+  }
+});
 </script>
 
 <template>
@@ -77,7 +82,7 @@ onMounted(() => {});
         </v-card-text>
 
         <div class="w-100">
-          <v-checkbox v-model="signatureAcknowledge" class="ml-4">
+          <v-checkbox v-model="signatureAcknowledge" class="ml-4" :disabled="signatureAcknowledge">
             <template #label>
               <div class="text-subtitle-2 w-75 pl-6">
                 I acknowledge that, by clicking “Sign Form” below, I am

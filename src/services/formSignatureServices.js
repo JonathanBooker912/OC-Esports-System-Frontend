@@ -10,6 +10,9 @@ export default {
   createFormSignature(data) {
     return apiClient.post("/formSignatures", data);
   },
+  directorFormSignature(id, data) {
+    return apiClient.post(`/formSignatures/${id}/director`, data)
+  },
   updateFormSignature(id, data) {
     return apiClient.put(`/formSignatures/${id}`, data);
   },
@@ -22,4 +25,7 @@ export default {
   getFormSignaturesByFormVersionId(formVersionId) {
     return apiClient.get(`/formSignatures/version/${formVersionId}`);
   },
+  getDirectorUnsigned(formVersionId) {
+    return apiClient.get(`/formSignatures/version/${formVersionId}?directorUnsigned=true`);
+  }
 };

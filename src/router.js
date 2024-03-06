@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "./views/LoginPage.vue";
 
 import Dashboard from "./views/UserDashboard.vue";
+import DirectorDashboard from "./views/DirectorDashboard.vue"
 import EditPlayerInfo from "./views/EditPlayerInfo.vue";
 import PlayerInfo from "./views/PlayerInfo.vue";
 import ViewAlias from "./views/ViewAlias.vue";
@@ -15,6 +16,7 @@ import MaintainMatchData from "./views/maintain/matchData/MaintainMatchData.vue"
 import MaintainMatchParticipants from "./views/maintain/matchParticipants/MaintainMatchParticipants.vue";
 import MaintainPlayerData from "./views/maintain/playerData/MaintainPlayerData.vue";
 import SignForms from "./views/SignForms.vue";
+import DirectorSignForms from "./views/Admin/directorSignForms.vue"
 
 import AuthServices from "./services/authServices.js";
 
@@ -50,6 +52,12 @@ const router = createRouter({
       alias: "/dashboard",
       name: "Dashboard",
       component: Dashboard,
+    },
+    {
+      path: "/directorDashboard",
+      alias: "/directorDashboard",
+      name: "directorDashboard",
+      component: DirectorDashboard
     },
     {
       path: "/",
@@ -125,6 +133,12 @@ const router = createRouter({
       name: "signForms",
       component: SignForms,
       props: true,
+    },
+    {
+      path: "/signForms/director/form/:formId",
+      name: "directorSignForms",
+      component: DirectorSignForms,
+      props: (route) => ({ formId: Number(route.params.formId) }),
     },
   ],
 });

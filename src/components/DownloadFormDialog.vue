@@ -16,6 +16,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  requireDirectorSignature: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const showDialog = computed(() => props.show);
@@ -50,7 +54,7 @@ onMounted(() => {});
     persistent
     class="align-center justify-center"
   >
-    <v-card>
+    <v-card v-if="!props.requireDirectorSignature">
       <div class="d-flex justify-center">
         <v-btn class="ma-4 mx-auto" color="primary" @click="getSignedForm">
           Download Signed Form
@@ -61,7 +65,14 @@ onMounted(() => {});
         You can download signed forms on the "My Info" page at any time
       </v-card-text>
     </v-card>
-    <vue-pdf-embed v-if="pdf" :source="pdf" :width="pdfWidth"></vue-pdf-embed>
+    <v-card v-else class="pa-2">
+      <v-card-text class="text-h5 text-center">
+        Form Signed
+      </v-card-text>
+      <v-card-text>
+        You will recieve a copy in your email when the director has signed it
+      </v-card-text>
+    </v-card>
   </v-overlay>
 </template>
 
