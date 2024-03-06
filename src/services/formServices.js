@@ -17,8 +17,8 @@ export default {
   deleteForm(id) {
     return apiClient.delete(`/forms/${id}`);
   },
-  getFormVersionById(versionId){
-    return apiClient.get(`/forms/version/${versionId}`)
+  getFormVersionById(versionId) {
+    return apiClient.get(`/forms/version/${versionId}`);
   },
   getFormVersions(formId) {
     return apiClient.get(`/forms/${formId}/versions`);
@@ -35,7 +35,7 @@ export default {
       },
     );
   },
-  getDirectorSignatureForms(){
-    return apiClient.get('forms/director/signatureReq')
-  }
+  getDirectorSignatureForms() {
+    return apiClient.get("forms/director/signatureReq");
+  },
 };

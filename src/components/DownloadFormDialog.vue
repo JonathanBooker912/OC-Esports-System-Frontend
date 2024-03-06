@@ -1,9 +1,8 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { onMounted, computed } from "vue";
 
 import Utils from "../config/utils";
 
-import VuePdfEmbed from "vue-pdf-embed";
 import FormServices from "../services/formServices.js";
 
 const props = defineProps({
@@ -18,12 +17,11 @@ const props = defineProps({
   },
   requireDirectorSignature: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const showDialog = computed(() => props.show);
-const pdf = ref(null);
 const user = Utils.getStore("user");
 
 const getSignedForm = async () => {
@@ -66,9 +64,7 @@ onMounted(() => {});
       </v-card-text>
     </v-card>
     <v-card v-else class="pa-2">
-      <v-card-text class="text-h5 text-center">
-        Form Signed
-      </v-card-text>
+      <v-card-text class="text-h5 text-center"> Form Signed </v-card-text>
       <v-card-text>
         You will recieve a copy in your email when the director has signed it
       </v-card-text>

@@ -3,8 +3,6 @@ import { ref, onMounted, computed } from "vue";
 import ComboBox from "../components/FormComponents/ComboBox.vue";
 import { required } from "@vuelidate/validators";
 
-import FormSignatureServices from "../services/formSignatureServices.js";
-
 import Utils from "../config/utils";
 
 const user = Utils.getStore("user");
@@ -17,12 +15,12 @@ const props = defineProps({
   },
   requireUserAcknowledgement: {
     type: Boolean,
-    default: true
+    default: true,
   },
   defaultFont: {
     type: String,
-    default: null
-  }
+    default: null,
+  },
 });
 const emit = defineEmits(["form-signed", "cancel"]);
 
@@ -43,18 +41,18 @@ const cancel = () => {
 };
 
 const signForm = () => {
-  if(props.requireUserAcknowledgement) {
+  if (props.requireUserAcknowledgement) {
     signatureAcknowledge.value = false;
   }
   emit("form-signed", fontSelection.value);
 };
 
 onMounted(() => {
-  if(props.requireUserAcknowledgement == false){
-    signatureAcknowledge.value = true
+  if (props.requireUserAcknowledgement == false) {
+    signatureAcknowledge.value = true;
   }
-  if(props.defaultFont != null) {
-    fontSelection.value = props.defaultFont
+  if (props.defaultFont != null) {
+    fontSelection.value = props.defaultFont;
   }
 });
 </script>
@@ -82,7 +80,11 @@ onMounted(() => {
         </v-card-text>
 
         <div class="w-100">
-          <v-checkbox v-model="signatureAcknowledge" class="ml-4" :disabled="signatureAcknowledge">
+          <v-checkbox
+            v-model="signatureAcknowledge"
+            class="ml-4"
+            :disabled="signatureAcknowledge"
+          >
             <template #label>
               <div class="text-subtitle-2 w-75 pl-6">
                 I acknowledge that, by clicking “Sign Form” below, I am

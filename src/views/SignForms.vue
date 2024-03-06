@@ -61,7 +61,7 @@ const getForms = async () => {
 };
 
 const handleFormSigned = (fontSelection) => {
-    const data = {
+  const data = {
     dateSigned: Date.now(),
     userId: user.userId,
     formVersionId: currentFormVersion.value,
@@ -90,7 +90,6 @@ const nextForm = () => {
     router.push({ name: "Dashboard" });
   }
 };
-
 
 onMounted(async () => {
   await getForms();
@@ -202,7 +201,9 @@ export default {
               :show="formSigned"
               :form-version="currentFormVersion"
               :pdf-name="formList[currentFormNumber].formVersions[0].source"
-              :require-director-signature="formList[currentFormNumber].formVersions[0].requireDirectorSig"
+              :require-director-signature="
+                formList[currentFormNumber].formVersions[0].requireDirectorSig
+              "
             />
           </v-card>
         </v-row>

@@ -1,5 +1,5 @@
 <script setup>
-import UnsignedForms from "../components/Admin/UnsignedForms.vue"
+import UnsignedForms from "../components/Admin/UnsignedForms.vue";
 </script>
 
 <template>
