@@ -60,7 +60,15 @@ const getForms = async () => {
   }
 };
 
-const handleFormSigned = () => {
+const handleFormSigned = (fontSelection) => {
+  const data = {
+    dateSigned: Date.now(),
+    userId: user.userId,
+    formVersionId: currentFormVersion.value,
+    fontSelection: fontSelection,
+  };
+  FormSignatureServices.createFormSignature(data);
+
   showDialog.value = false;
   formSigned.value = true;
 };
@@ -193,6 +201,9 @@ export default {
               :show="formSigned"
               :form-version="currentFormVersion"
               :pdf-name="formList[currentFormNumber].formVersions[0].source"
+              :require-director-signature="
+                formList[currentFormNumber].formVersions[0].requireDirectorSig
+              "
             />
           </v-card>
         </v-row>
