@@ -21,4 +21,7 @@ export default {
       `/titles?filter=${filter}&pageSize=${pageSize}&page=${page}`,
     );
   },
+  getAllTitles() {
+    return apiClient.get("/titles/all/raw");
+  },
 };

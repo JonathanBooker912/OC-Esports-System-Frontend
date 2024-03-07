@@ -6,7 +6,7 @@ import { required } from "@vuelidate/validators";
 // const props = defineProps(["modelValue", "errors"]);
 const props = defineProps({
   modelValue: {
-    type: Object,
+    type: String,
     default: null,
   },
   errors: {
