@@ -13,7 +13,7 @@ export default {
   create(data, userId) {
     return apiClient.post("/alias/" + userId + "/alias", data);
   },
-  update(data, userId, aliasId) {
+  update(userId, aliasId, data) {
     return apiClient.put("/alias/" + userId + "/alias/" + aliasId, data);
   },
   deleteOne(userId, aliasId) {

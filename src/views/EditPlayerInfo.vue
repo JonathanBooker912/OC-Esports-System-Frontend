@@ -12,14 +12,16 @@ import MonthYearPicker from "../components/View/MonthYearPicker.vue";
 import TextField from "../components/FormComponents/TextField.vue";
 import ComboBox from "../components/FormComponents/ComboBox.vue";
 import YesNoRadio from "../components/FormComponents/YesNoRadio.vue";
-import Select from "../components/FormComponents/SelectBox.vue";
+// import Select from "../components/FormComponents/SelectBox.vue";
 /* API Services */
-import TitleServices from "../services/titleServices";
+//import TitleServices from "../services/titleServices";
 import UserServices from "../services/userServices";
+import AliasServices from "../services/aliasServices";
 
-const titles = ref(); //Store the games (titles) retrieved from the database
+//const titles = ref(); //Store the games (titles) retrieved from the database
 const userInfoLoaded = ref(false); // used to prevent the components from loading before data is ready
 const errorMessage = ref();
+const showDialog = ref(false);
 
 const router = useRouter();
 
@@ -60,11 +62,16 @@ const validateForm = async () => {
   const valid = await v$.value.$validate(); // check all fields for invalid input
   if (valid) {
     // if no errors, proceed with form submission
-    errorMessage.value = "";
-    userInfo.value.accountUpToDate = true;
-    await updateInfo();
-    if (errorMessage.value == "") {
-      router.push({ name: "Dashboard" });
+    try {
+      errorMessage.value = "";
+      userInfo.value.accountUpToDate = true;
+      await updateInfo();
+      if (errorMessage.value == "") {
+        router.push({ name: "Dashboard" });
+      }
+    } catch (error) {
+      errorMessage.value = error.message;
+      showDialog.value = true;
     }
   } else {
     return;
@@ -125,19 +132,19 @@ async function updateInfo() {
 
   /* Get the id associated with the primary alias (if any),
         and update it accordingly */
-  UserServices.getPrimaryAlias(userId).then((response) => {
-    if (response.data.length == 0) {
-      UserServices.addAlias(userId, {
-        title: userInfo.value.title,
-        gamerTag: userInfo.value.gamerTag,
-      });
-    } else {
-      UserServices.updateAlias(userId, response.data[0].id, {
-        title: userInfo.value.title,
-        gamerTag: userInfo.value.gamerTag,
-      });
-    }
-  });
+  const response = await AliasServices.getPrimaryAlias(userId);
+
+  if (response.data.length == 0) {
+    UserServices.addAlias(userId, {
+      title: userInfo.value.title,
+      gamerTag: userInfo.value.gamerTag,
+    });
+  } else {
+    await AliasServices.update(userId, response.data[0].id, {
+      title: userInfo.value.title,
+      gamerTag: userInfo.value.gamerTag,
+    });
+  }
 }
 
 // retrieve the user's current information from the backend
@@ -147,7 +154,7 @@ function getUser() {
     userInfo.value = { ...response.data }; // Assign the values from the database to userInfo
     getDataLists(); // get the list of titles and classifications
 
-    UserServices.getPrimaryAlias(userId).then((response) => {
+    AliasServices.getPrimaryAlias(userId).then((response) => {
       if (response.data.length > 0) {
         // check if there is a primary alias
         userInfo.value.gamerTag = response.data[0].gamerTag;
@@ -174,11 +181,11 @@ function getEmergencyContacts() {
 }
 
 const getDataLists = () => {
-  TitleServices.getTitles().then((response) => {
-    titles.value = response.data.map((title) => {
-      return { name: title.name, value: title.id };
-    });
-  });
+  // TitleServices.getAllTitles().then((response) => {
+  //   titles.value = response.data.map((title) => {
+  //     return { name: title.name, value: title.id };
+  //   });
+  // });
 
   // get the list of classifications supported
   UserServices.getClassifications().then((response) => {
@@ -282,12 +289,12 @@ export default {
 
             <!--This has to be a v-select because v-combobox doesn't destructure
             Javascript objects -->
-            <Select
+            <!--<Select
               v-model="userInfo.title"
               :items="titles"
               label="What game do you play?"
               :validators="{ required }"
-            />
+            />-->
 
             <ComboBox
               v-model="userInfo.shirtSize"
@@ -361,5 +368,15 @@ export default {
         </v-container>
       </v-card>
     </v-col>
+    <v-dialog v-model="showDialog" width="auto">
+      <v-card>
+        <v-card-text>
+          {{ errorMessage }}
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" block @click="showDialog = false">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
