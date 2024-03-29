@@ -18,25 +18,9 @@ import MaintainPlayerData from "./views/maintain/playerData/MaintainPlayerData.v
 import SignForms from "./views/SignForms.vue";
 import DirectorSignForms from "./views/Admin/directorSignForms.vue";
 
-import AuthServices from "./services/authServices.js";
+import RouterStateController from "./utils/routerStateController.js";
 
-function authenticateUser(to, from, next) {
-  // Grabs the user from local storage and turns it into a JSON object that we can use
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  // Calls the backend to validate the token
-  AuthServices.validateToken(user)
-    .then(() => {
-      // If the backend returns with an all good, then we can direct the user
-      //  to where they were trying to go
-      next();
-    })
-    .catch(() => {
-      // If the backend returns with any error, I just redirect them to
-      //  the login page
-      next({ path: "/login" });
-    });
-}
+const routerState = new RouterStateController();
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -143,15 +127,36 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user === undefined && to.path !== "/login") {
-    next({ path: "/login" });
-  } else if (to.path == "/") {
-    authenticateUser(to, from, next);
-  } else {
-    next();
+router.beforeEach(async (to, from, next) => {
+  //const user = JSON.parse(localStorage.getItem("user"));
+  const isAuthenticated = await routerState.isAuthenticated();
+
+  if (!isAuthenticated) {
+    if (to.path !== "/login") {
+      next({ path: "/login" });
+    } else {
+      next();
+    }
+  } else if (isAuthenticated) {
+    if (!(await routerState.hasCompletedQuestionnare())) {
+      if (to.path !== "/playerForm") {
+        next({ path: "/playerForm" });
+      } else {
+        next();
+      }
+    } else if (!(await routerState.hasSignedForms())) {
+      if (to.path !== "/signForms") {
+        next({ path: "/signForms" });
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
   }
+  // else if(await routerState.isAuthenticated() && to.path == "/login") {
+  //   next({ path: "/"})
+  // }
 });
 
 export default router;

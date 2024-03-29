@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import AuthServices from "../../services/authServices";
-import UserServices from "../../services/userServices";
+//import UserServices from "../../services/userServices";
 import Utils from "../../config/utils.js";
 import { useRouter } from "vue-router";
 import { useMenuStore } from "../../stores/menuBarStore";
@@ -43,22 +43,23 @@ const handleCredentialResponse = async (response) => {
       lName.value = user.value.lName;
 
       store.setDisplayActions(true);
-      navigateToNextPage();
+      //navigateToNextPage();
+      router.push({ name: "Dashboard" });
     })
     .catch((error) => {
       console.log("error", error);
     });
 };
 
-const navigateToNextPage = () => {
-  UserServices.getUser(Utils.getStore("user").userId).then((response) => {
-    if (!response.data.accountUpToDate) {
-      router.push({ name: "playerForm" });
-    } else {
-      router.push({ name: "Dashboard" });
-    }
-  });
-};
+// const navigateToNextPage = () => {
+//   UserServices.getUser(Utils.getStore("user").userId).then((response) => {
+//     if (!response.data.accountUpToDate) {
+//       router.push({ name: "playerForm" });
+//     } else {
+//       router.push({ name: "Dashboard" });
+//     }
+//   });
+// };
 
 onMounted(() => {
   loginWithGoogle();

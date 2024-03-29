@@ -59,6 +59,10 @@ const logout = () => {
   AuthServices.logoutUser(user.value)
     .then(() => {
       Utils.removeItem("user");
+      Utils.removeItem("userAuthenticated");
+      Utils.removeItem("userHasCompletedQuestionnare");
+      Utils.removeItem("userHasSignedForms");
+
       store.setDisplayActions(false);
       router.push({ name: "login" });
     })
