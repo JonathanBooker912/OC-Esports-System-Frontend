@@ -8,6 +8,7 @@ import { useRouter } from "vue-router";
 
 import Utils from "../../config/utils";
 import AuthServices from "../../services/authServices";
+import UserRoleServices from "../../services/userRoleServices";
 
 import { storeToRefs } from "pinia";
 import { useMenuStore } from "../../stores/menuBarStore";
@@ -17,6 +18,8 @@ const { displayActions } = storeToRefs(store);
 
 const router = useRouter();
 const user = ref(null);
+const userRoles = ref([]);
+
 const title = ref("Esports Portal");
 const initials = ref("");
 const name = ref("");
@@ -44,16 +47,29 @@ const maintainenceActions = [
 
 const userDetailsLoaded = ref(false);
 
-const resetMenu = () => {
+const resetMenu = async () => {
   user.value = null;
   user.value = Utils.getStore("user");
   if (user.value) {
     initials.value = user.value.fName[0] + user.value.lName[0];
     name.value = user.value.fName + " " + user.value.lName;
     userDetailsLoaded.value = true;
+
+    await getUserRoles();
   }
 };
 watch(displayActions, resetMenu);
+
+const getUserRoles = async () => {
+  await UserRoleServices.getAllRolesForUser(user.value.userId).then(
+    (response) => {
+      const mappedRoles = response.data.map((currentRole) => {
+        return currentRole.role.type;
+      });
+      userRoles.value = mappedRoles;
+    },
+  );
+};
 
 const logout = () => {
   AuthServices.logoutUser(user.value)
@@ -74,6 +90,7 @@ const logout = () => {
 onMounted(() => {
   logoURL.value = ocLogo;
   backgroundUrl.value = background;
+
   resetMenu();
 });
 </script>
@@ -114,11 +131,11 @@ export default {
       <div v-if="displayActions && !displayDrawer" class="pr-3">
         <!--<v-btn class="mx-2" :to="{ name: 'tutorials' }"> List </v-btn>
         <v-btn class="mx-2" :to="{ name: 'add' }"> Add Tutorial </v-btn>-->
-        <v-btn class="mx-2" :to="{ name: 'viewAlias' }" color="secondary">
-          Aliases
+        <v-btn class="mx-2" :to="{ name: 'Dashboard' }" color="secondary">
+          Dashboard
         </v-btn>
 
-        <v-btn color="secondary">
+        <v-btn v-if="userRoles.includes('Admin')" color="secondary">
           Maintain
 
           <v-menu activator="parent" open-on-hover>

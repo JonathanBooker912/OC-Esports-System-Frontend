@@ -1,14 +1,14 @@
 <script setup>
-import UnsignedForms from "../components/Admin/UnsignedForms.vue";
+import PlayerMetricChartList from "../PlayerMetricChartList.vue";
 </script>
 
 <template>
   <v-container>
-    <h1>Director Dashboard</h1>
+    <h1>Player Statistics</h1>
     <v-row>
       <v-col cols="4"> </v-col>
       <v-col class="w-75 float-right">
-        <UnsignedForms form="1" />
+        <PlayerMetricChartList :alias-id="1" :title-id="1" />
       </v-col>
     </v-row>
   </v-container>

@@ -7,6 +7,9 @@ export default {
   getAllRoles() {
     return apiClient.get("userrole");
   },
+  getAllRolesForUser(userId) {
+    return apiClient.get(`userrole/user/${userId}`);
+  },
   getRole(id) {
     return apiClient.get("userrole/" + id);
   },

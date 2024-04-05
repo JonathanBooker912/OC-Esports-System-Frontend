@@ -3,6 +3,7 @@ import UserServices from "../services/userServices";
 import AuthServices from "../services/authServices.js";
 import FormServices from "../services/formServices.js";
 import FormSignatureServices from "../services/formSignatureServices.js";
+import UserRoleServices from "../services/userRoleServices.js";
 
 export default class RouterStateController {
   async isAuthenticated() {
@@ -16,6 +17,7 @@ export default class RouterStateController {
           if (isValidToken.data.isValid) {
             console.log("Valid");
             Utils.setStore("userAuthenticated", true);
+            await checkAdminPriviledges();
             return true;
           }
           return false;
@@ -83,4 +85,19 @@ const getNumUnsignedForms = async (userId) => {
   });
 
   return unsignedFormCount;
+};
+
+const checkAdminPriviledges = async () => {
+  const user = Utils.getStore("user");
+
+  const response = await UserRoleServices.getAllRolesForUser(user.userId);
+  const mappedRoles = response.data.map((currentRole) => {
+    return currentRole.role.type;
+  });
+  const userRoles = mappedRoles;
+
+  if (userRoles.includes("Admin") || userRoles.includes("Director")) {
+    Utils.setStore("userHasCompletedQuestionnare", true);
+    Utils.setStore("userHasSignedForms", true);
+  }
 };
