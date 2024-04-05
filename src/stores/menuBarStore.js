@@ -14,5 +14,6 @@ export const useMenuStore = defineStore("menuState", () => {
   function setDisplayActions(value) {
     displayActions.value = value;
   }
+
   return { displayActions, setDisplayActions, initials, name, email };
 });

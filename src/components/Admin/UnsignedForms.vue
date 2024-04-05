@@ -38,7 +38,7 @@ onMounted(async () => {
 <template>
   <v-card v-if="!loading">
     <v-card-title class="bg-primary"> Unsigned Forms </v-card-title>
-    <v-list>
+    <v-list v-if="directorForms.length > 1">
       <v-list-item
         v-for="currentForm in directorForms"
         :key="currentForm.id"
@@ -50,5 +50,6 @@ onMounted(async () => {
         {{ currentForm.form.name }}
       </v-list-item>
     </v-list>
+    <v-card-text v-else class="mt-3"> All forms have been signed </v-card-text>
   </v-card>
 </template>

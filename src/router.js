@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import Login from "./views/LoginPage.vue";
 
-import Dashboard from "./views/UserDashboard.vue";
-import DirectorDashboard from "./views/DirectorDashboard.vue";
+import Dashboard from "./views/DashboardBase.vue";
 import EditPlayerInfo from "./views/EditPlayerInfo.vue";
 import PlayerInfo from "./views/PlayerInfo.vue";
 import ViewAlias from "./views/ViewAlias.vue";
@@ -36,12 +35,6 @@ const router = createRouter({
       alias: "/dashboard",
       name: "Dashboard",
       component: Dashboard,
-    },
-    {
-      path: "/directorDashboard",
-      alias: "/directorDashboard",
-      name: "directorDashboard",
-      component: DirectorDashboard,
     },
     {
       path: "/",
