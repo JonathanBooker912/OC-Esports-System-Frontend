@@ -123,6 +123,7 @@ const updateTeam = () => {
     name: selectedTeam.value.name,
     isFlagship: selectedTeam.value.isFlagship,
     titleId: selectedTeam.value.titleId,
+    teamColor: selectedTeam.value.teamColor,
   };
   TeamServices.updateTeam(selectedTeam.value.id, updatedTeam)
     .then(() => {
@@ -171,23 +172,34 @@ onMounted(() => {
             <v-btn icon="mdi-arrow-left" @click="dialog = false" />
           </v-toolbar>
           <v-card-text>
-            <TextField
-              v-model="selectedTeam.name"
-              label="Team Name"
-              :validators="{ required }"
-            />
-            <Select
-              v-model="selectedTeam.titleId"
-              label="Title"
-              :items="props.titles"
-              :validators="{ required }"
-            />
-            <div class="text-h5 pa-5">
-              <v-checkbox
-                v-model="selectedTeam.isFlagship"
-                label="Is Flagship"
-              />
-            </div>
+            <v-row>
+              <v-col>
+                <TextField
+                  v-model="selectedTeam.name"
+                  label="Team Name"
+                  :validators="{ required }"
+                />
+
+                <Select
+                  v-model="selectedTeam.titleId"
+                  label="Title"
+                  :items="props.titles"
+                  :validators="{ required }"
+                />
+                <div class="text-h5 pa-5">
+                  <v-checkbox
+                    v-model="selectedTeam.isFlagship"
+                    label="Is Flagship"
+                  />
+                </div>
+              </v-col>
+              <v-col>
+                <v-color-picker
+                  v-model="selectedTeam.teamColor"
+                  class="w-100 mx-auto my-2 border"
+                />
+              </v-col>
+            </v-row>
           </v-card-text>
           <div class="text-center">
             <v-btn color="primary" class="ma-4" @click="validateForm">

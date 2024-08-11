@@ -48,6 +48,7 @@ const team = ref({
   name: "",
   isFlagship: false,
   titleId: null,
+  teamColor: "80162b",
 });
 
 const resetAdd = () => {
@@ -63,18 +64,25 @@ const resetAdd = () => {
 <template>
   <div>
     <div class="w-75 mx-auto mt-4">
-      <Select
-        v-model="team.titleId"
-        :items="props.titles"
-        label="Title"
-        :validators="{ required }"
-      />
-      <TextField
-        v-model="team.name"
-        label="Team Name"
-        :validators="{ required }"
-      />
-      <v-checkbox v-model="team.isFlagship" label="Is Flagship" />
+      <v-row>
+        <v-col>
+          <Select
+            v-model="team.titleId"
+            :items="props.titles"
+            label="Title"
+            :validators="{ required }"
+          />
+          <TextField
+            v-model="team.name"
+            label="Team Name"
+            :validators="{ required }"
+          />
+          <v-checkbox v-model="team.isFlagship" label="Is Flagship" />
+        </v-col>
+        <v-col>
+          <v-color-picker v-model="team.teamColor" class="mx-auto my-2" />
+        </v-col>
+      </v-row>
     </div>
     <div class="text-center">
       <v-btn color="primary" class="ma-4" @click="validateForm"> Save </v-btn>
