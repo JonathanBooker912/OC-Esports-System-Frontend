@@ -17,6 +17,10 @@ export default {
     return apiClient.get(`/facility/reservations/station/${facilityStationId}`);
   },
 
+  getAllByDate(data) {
+    return apiClient.post(`/facility/reservations/station/date`, data);
+  },
+
   getById(id) {
     return apiClient.get(`/facility/reservations/${id}`);
   },
